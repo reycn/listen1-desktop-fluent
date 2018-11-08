@@ -1,8 +1,11 @@
 const electron = require('electron')
-// Module to control application life.
+    // Module to control application life.
 const app = electron.app
-
-// Module to create native browser window.
+    /*获取electron窗体的菜单栏*/
+const Menu = electron.Menu
+    /*隐藏electron创听的菜单栏*/
+Menu.setApplicationMenu(null)
+    // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 
 var path = require('path')
@@ -14,119 +17,127 @@ let mainWindow
 let willQuitApp = false;
 
 function initialTray(mainWindow) {
-  const {app, Menu, Tray} = require('electron');
+    const { app, Menu, Tray } = require('electron');
 
-  let appIcon = null;
+    let appIcon = null;
 
-  var trayIconPath = path.join(__dirname, '/resources/logo_16.png');
-  appTray = new Tray(trayIconPath);
+    var trayIconPath = path.join(__dirname, '/resources/logo_16.png');
+    appTray = new Tray(trayIconPath);
 
-  function toggleVisiable() {
-    var isVisible = mainWindow.isVisible();
-    if (isVisible) {
-      mainWindow.hide();
-    } else {
-      mainWindow.show();
+    function toggleVisiable() {
+        var isVisible = mainWindow.isVisible();
+        if (isVisible) {
+            mainWindow.hide();
+        } else {
+            mainWindow.show();
+        }
     }
-  }
-  const contextMenu = Menu.buildFromTemplate([
-    {label: 'Show/Hide Window',  click(){
-      toggleVisiable();
-    }},
-    {label: 'Quit',  click() {
-      app.quit(); 
-    }},
-  ]);
-  //appTray.setToolTip('This is my application.');
-  appTray.setContextMenu(contextMenu);
-  appTray.on('click', function handleClicked () {
-    toggleVisiable();
-  });
+    const contextMenu = Menu.buildFromTemplate([{
+            label: 'Show/Hide Window',
+            click() {
+                toggleVisiable();
+            }
+        },
+        {
+            label: 'Quit',
+            click() {
+                app.quit();
+            }
+        },
+    ]);
+    //appTray.setToolTip('This is my application.');
+    appTray.setContextMenu(contextMenu);
+    appTray.on('click', function handleClicked() {
+        toggleVisiable();
+    });
 }
 
-function createWindow () {
+function createWindow() {
 
-  const session = require('electron').session;
+    const session = require('electron').session;
 
-  const filter = {
-    urls: ["*://music.163.com/*", "*://*.xiami.com/*", "*://*.qq.com/*", 
-      "https://listen1.github.io/listen1/callback.html?code=*"]
-  };
+    const filter = {
+        urls: ["*://music.163.com/*", "*://*.xiami.com/*", "*://*.qq.com/*",
+            "https://listen1.github.io/listen1/callback.html?code=*"
+        ]
+    };
 
-  session.defaultSession.webRequest.onBeforeSendHeaders(filter, function(details, callback) {
-    if(details.url.startsWith("https://listen1.github.io/listen1/callback.html?code=")){
-      const url = details.url;
-      const code = url.split('=')[1];
-      mainWindow.webContents.executeJavaScript('Github.handleCallback("'+code+'");');
-    }
-    else {
-      hack_referer_header(details); 
-    }
-    callback({cancel: false, requestHeaders: details.requestHeaders});
-  });
+    session.defaultSession.webRequest.onBeforeSendHeaders(filter, function(details, callback) {
+        if (details.url.startsWith("https://listen1.github.io/listen1/callback.html?code=")) {
+            const url = details.url;
+            const code = url.split('=')[1];
+            mainWindow.webContents.executeJavaScript('Github.handleCallback("' + code + '");');
+        } else {
+            hack_referer_header(details);
+        }
+        callback({ cancel: false, requestHeaders: details.requestHeaders });
+    });
 
-  // Create the browser window.
-  mainWindow = new BrowserWindow({
-    width: 1024,
-    height: 768,
-    'webPreferences': {'nodeIntegration': false},
-    icon: iconPath
-  });
+    // Create the browser window.
+    mainWindow = new BrowserWindow({
+        width: 1024,
+        height: 768,
+        'webPreferences': { 'nodeIntegration': false },
+        icon: iconPath,
+        frame: false
+    });
 
-  // mainWindow.webContents.openDevTools();
-  mainWindow.on('close', (e) => {
-    if (willQuitApp) {
-      /* the user tried to quit the app */
-      mainWindow = null;
-    } else {
-      /* the user only tried to close the window */
-      //if (process.platform != 'linux') {
-        e.preventDefault();
-        mainWindow.hide();
-        //mainWindow.minimize();
-      //}
+    // mainWindow.webContents.openDevTools();
+    mainWindow.on('close', (e) => {
+        if (willQuitApp) {
+            /* the user tried to quit the app */
+            mainWindow = null;
+        } else {
+            /* the user only tried to close the window */
+            //if (process.platform != 'linux') {
+            e.preventDefault();
+            mainWindow.hide();
+            //mainWindow.minimize();
+            //}
 
-    }
-  });
+        }
+    });
 
 
-  // and load the index.html of the app.
-  mainWindow.loadURL(`file://${__dirname}/listen1_chrome_extension/listen1.html`)
+    // and load the index.html of the app.
+    mainWindow.loadURL(`file://${__dirname}/listen1_chrome_extension/listen1.html`)
 
-  // Open the DevTools.
-  //mainWindow.webContents.openDevTools()
+    // Open the DevTools.
+    //mainWindow.webContents.openDevTools()
 
-  // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null
-  })
+    // Emitted when the window is closed.
+    mainWindow.on('closed', function() {
+        // Dereference the window object, usually you would store windows
+        // in an array if your app supports multi windows, this is the time
+        // when you should delete the corresponding element.
+        mainWindow = null
+    })
 
-  // define global menu content, also add support for cmd+c and cmd+v shortcuts
-  var template = [{
-      label: "Application",
-      submenu: [
-          { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
-          { type: "separator" },
-          { label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); }}
-      ]}, {
-      label: "Edit",
-      submenu: [
-          { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
-          { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-          { type: "separator" },
-          { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
-          { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
-          { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-          { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
-      ]}
-  ];
+    // define global menu content, also add support for cmd+c and cmd+v shortcuts
+    var template = [{
+        label: "Application",
+        submenu: [
+            { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
+            { type: "separator" },
+            { label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); } }
+        ]
+    }, {
+        label: "Edit",
+        submenu: [
+            { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+            { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+            { type: "separator" },
+            { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+            { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+            { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+            { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+        ]
+    }];
 
-  electron.Menu.setApplicationMenu(electron.Menu.buildFromTemplate(template));
+    electron.Menu.setApplicationMenu(null);
+    // electron.Menu.setApplicationMenu(electron.Menu.buildFromTemplate(template));
 
-  initialTray(mainWindow);
+    initialTray(mainWindow);
 }
 
 function hack_referer_header(details) {
@@ -139,7 +150,7 @@ function hack_referer_header(details) {
         refererValue = "http://m.xiami.com/";
     }
 
-    if ((details.url.indexOf("y.qq.com/") != -1) || 
+    if ((details.url.indexOf("y.qq.com/") != -1) ||
         (details.url.indexOf("qqmusic.qq.com/") != -1) ||
         (details.url.indexOf("music.qq.com/") != -1) ||
         (details.url.indexOf("imgcache.qq.com/") != -1)) {
@@ -156,10 +167,10 @@ function hack_referer_header(details) {
             break;
         }
     }
-    
+
     if ((!isRefererSet) && (refererValue != '')) {
-      headers["Origin"] = refererValue;
-      headers["Referer"] = refererValue;
+        headers["Origin"] = refererValue;
+        headers["Referer"] = refererValue;
     }
     details.requestHeaders = headers;
 };
@@ -172,12 +183,12 @@ function hack_referer_header(details) {
 app.on('ready', createWindow)
 
 // Quit when all windows are closed.
-app.on('window-all-closed', function () {
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+app.on('window-all-closed', function() {
+    // On OS X it is common for applications and their menu bar
+    // to stay active until the user quits explicitly with Cmd + Q
+    if (process.platform !== 'darwin') {
+        app.quit()
+    }
 })
 
 
@@ -187,5 +198,3 @@ app.on('activate', () => mainWindow.show());
 /* 'before-quit' is emitted when Electron receives 
  * the signal to exit and wants to start closing windows */
 app.on('before-quit', () => willQuitApp = true);
-
-
