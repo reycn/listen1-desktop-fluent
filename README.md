@@ -11,7 +11,7 @@ Listen 1可以搜索和播放来自网易云音乐，虾米，QQ音乐三个主�
 - 导航栏右键可单击关闭/最大化/最小化
 
 
-[![imgur](http://i.imgur.com/Ae6ItmA.png)]()
+[![imgur](https://i.imgur.com/nxAcNZq.jpg)]()
 
 * 支持Windows，Mac，Linux平台
 
