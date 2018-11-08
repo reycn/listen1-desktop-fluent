@@ -13,36 +13,4 @@ Listen 1可以搜索和播放来自网易云音乐，虾米，QQ音乐三个主�
 
 [![imgur](https://i.imgur.com/nxAcNZq.jpg)]()
 
-* 支持Windows，Mac，Linux平台
-
-
-生成完整代码
------------
-项目中包含了listen1_chrome_extension的引用，在checkout后需要把引用库初始化
-
-    git submodule update --init --recursive
-
-运行
-----
-
-    npm run start
-
-生成安装包
----------
-全平台安装包
-
-    npm run dist
-
-Windows安装包
-
-    npm run dist:win32
-    npm run dist:win64
-    
-Mac安装包
-
-    npm run dist:mac
-    
-Linux安装包
-
-    npm run dist:linux32
-    npm run dist:linux64
+* 本版本只支持Windows平台，其他平台建议使用原版。
