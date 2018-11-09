@@ -10,7 +10,10 @@ Listen 1可以搜索和播放来自网易云音乐，虾米，QQ音乐三个主�
 - 所有导航栏空白部分添加拖动控制方便移动窗口
 - 所有导航栏空白部分双击最大化，单击出现窗口菜单（最大化、最小化、关闭）
 - 修改了一些元素布局，更为美观
+- 更改字体为无衬线字体
+- 整体加深了透明面板以便更好地识别文字
 
-[![imgur](https://i.imgur.com/3uzyHdD.png)]()
+<img src="https://i.imgur.com/rh937l2.png"/>
+<img src="https://i.imgur.com/RFnJK53.png"/>
 
 * 本版本只支持Windows平台，其他平台建议使用原版。
