@@ -24,7 +24,7 @@ Listen 1可以搜索和播放来自网易云音乐，虾米，QQ音乐三个主�
 本版本新增依赖
 ----- 
 
-新增依赖 <a href='https://github.com/sebascontre/windows10-fluently-vibrancy'>windows10-fluently-vibrancy</a>"：
+新增依赖 <a href='https://github.com/sebascontre/windows10-fluently-vibrancy'>Windows10-fluently-vibrancy</a>：
 
     "windows10-fluently-vibrancy": "^0.9.2"
 
