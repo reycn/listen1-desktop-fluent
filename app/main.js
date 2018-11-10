@@ -1,4 +1,5 @@
 const electron = require('electron')
+    // const electronAcrylic = require('windows10-fluently-vibrancy');
     // Module to control application life.
 const app = electron.app
     /*获取electron窗体的菜单栏*/
@@ -75,13 +76,16 @@ function createWindow() {
 
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        width: 1024,
-        height: 768,
+        width: 940,
+        height: 600,
         'webPreferences': { 'nodeIntegration': false },
+        transparent: true,
         icon: iconPath,
         frame: false
     });
+    const electronVibrancy = require('windows10-fluently-vibrancy');
 
+    electronVibrancy.enableVibrancy(mainWindow, 2);
     // mainWindow.webContents.openDevTools();
     mainWindow.on('close', (e) => {
         if (willQuitApp) {
