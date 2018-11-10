@@ -1,0 +1,24 @@
+{
+    "background": {
+        "scripts": ["js/vendor/jquery-2.2.3.min.js", "js/github_api.js","js/background.js" ]
+    },
+    "browser_action": {
+        "default_icon": "images/logo.png",
+        "default_title": "Listen 1"
+    },
+    "description": "One for all free music in China",
+    "icons": {
+        "128": "images/logo.png",
+        "16": "images/logo_16.png",
+        "48": "images/logo_48.png"
+    },
+    "manifest_version": 2,
+    "name": "Listen 1",
+    "permissions": [ "notifications", "unlimitedStorage", "downloads", "storage", "contextMenus", "tabs", "*://music.163.com/*", "*://*.xiami.com/*", "*://*.qq.com/*", "*://*.kugou.com/", "*://*.kuwo.cn/", "*://api.github.com/*", "*://github.com/*", "webRequest", "webRequestBlocking"],
+    "version": "1.8.0",
+    "web_accessible_resources": [ "images/*" ],
+    "content_scripts": [{
+        "matches": ["https://listen1.github.io/listen1/*"],
+        "js": ["js/oauth_callback.js"]
+    }]
+}
