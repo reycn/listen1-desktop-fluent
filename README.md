@@ -28,11 +28,6 @@ Listen 1可以搜索和播放来自网易云音乐，虾米，QQ音乐三个主�
 
     "windows10-fluently-vibrancy": "^0.9.2"
 
-生成完整代码
------------
-项目中包含了listen1_chrome_extension的引用，在checkout后需要把引用库初始化
-
-    git submodule update --init --recursive
 
 运行
 ----
