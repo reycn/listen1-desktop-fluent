@@ -58,3 +58,10 @@ Linux安装包
 
     npm run dist:linux32
     npm run dist:linux64
+
+
+TODO
+----
+- 添加最大化/最小化按钮 （目前点击托盘图标就可以很方便地最小化/唤起窗口，不过按钮添加也在计划内。）
+- UI 的细节调整
+- 如有可能，修复虾米API
