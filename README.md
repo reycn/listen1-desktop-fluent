@@ -3,7 +3,8 @@ Listen 1 音乐播放器（Windows无边框版）
 
 Listen 1可以搜索和播放来自网易云音乐，虾米，QQ音乐三个主流音乐网站的歌曲，让你的曲库更全面。并支持收藏功能，方便的创建自己的歌单。
 
-本版本和原版对比：
+本版和原版对比：
+---- 
 - 背景毛玻璃效果（relase也有旧版没有毛玻璃效果的）
 - 去除菜单栏
 - 去除标题栏及窗口边框
@@ -13,7 +14,14 @@ Listen 1可以搜索和播放来自网易云音乐，虾米，QQ音乐三个主�
 - 更改字体为无衬线字体
 - 整体加深了透明面板以便更好地识别文字
 
-<img src="https://i.imgur.com/rh937l2.png"/>
-<img src="https://i.imgur.com/RFnJK53.png"/>
+1.8.2 更新：
+---- 
+- 添加最小化按钮（<del>钻研了一下 AngularJS 和 Electron 的协作可花时间了……</del>）
+- 添加空格快捷键暂停/播放
+- 提升了加载速度
+- 修复了几个BUG
+
+<img src="https://i.imgur.com/h7NtwBB.png"/>
+<img src="https://i.imgur.com/MVmoJqW.png"/>
 
 * 本版本只支持Windows平台，其他平台建议使用原版。
