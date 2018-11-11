@@ -1,87 +1,86 @@
 {
-  "name": "Listen1",
-  "version": "1.8.0",
-  "description": "One for all free music in China",
-  "main": "app/main.js",
-  "scripts": {
-    "postinstall": "install-app-deps",
-    "start": "electron ./app --enable-logging",
-    "dev": "NODE_ENV='development' npm run start",
-    "dist:mac": "CSC_IDENTITY_AUTO_DISCOVERY=false DEBUG=electron-builder electron-builder --platform darwin",
-    "dist": "electron-builder .",
-    "dist:linux": "electron-builder --linux --ia32 --x64",
-    "dist:linux32": "electron-builder --linux --ia32",
-    "dist:linux64": "electron-builder --linux --x64",
-    "dist:win": "electron-builder --win --ia32 --x64",
-    "dist:win32": "electron-builder --win --ia32",
-    "dist:win64": "electron-builder --win --x64"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/listen1/listen1_desktop.git"
-  },
-  "keywords": [
-    "Electron",
-    "Listen 1"
-  ],
-  "author": "Listen 1 <githublisten1@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/listen1/listen1_desktop/issues"
-  },
-  "homepage": "https://github.com/listen1/listen1_desktop#readme",
-  "build": {
-    "appId": "com.listen1.listen1",
-    "productName": "Listen1",
-    "asar": false,
-    "artifactName": "${name}_${version}_${os}${arch}.${ext}",
-    "dmg": {
-      "title": "Listen 1",
-      "icon": "build/disk.icns",
-      "background": "build/background.png",
-      "iconSize": 80,
-      "contents": [
-        {
-          "x": 192,
-          "y": 344
+    "name": "Listen1",
+    "version": "1.8.2",
+    "description": "One for all free music in China",
+    "main": "app/main.js",
+    "scripts": {
+        "postinstall": "install-app-deps",
+        "start": "electron . --inspect-brk=5858 --enable-logging",
+        "dev": "NODE_ENV='development' npm run start",
+        "dist:mac": "CSC_IDENTITY_AUTO_DISCOVERY=false DEBUG=electron-builder electron-builder --platform darwin",
+        "dist": "electron-builder .",
+        "dist:linux": "electron-builder --linux --ia32 --x64",
+        "dist:linux32": "electron-builder --linux --ia32",
+        "dist:linux64": "electron-builder --linux --x64",
+        "dist:win": "electron-builder --win --ia32 --x64",
+        "dist:win32": "electron-builder --win --ia32",
+        "dist:win64": "electron-builder --win --x64"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/listen1/listen1_desktop.git"
+    },
+    "keywords": [
+        "Electron",
+        "Listen 1"
+    ],
+    "author": "Listen 1 <githublisten1@gmail.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/listen1/listen1_desktop/issues"
+    },
+    "homepage": "https://github.com/listen1/listen1_desktop#readme",
+    "build": {
+        "appId": "com.listen1.listen1",
+        "productName": "Listen1",
+        "asar": false,
+        "artifactName": "${name}_${version}_${os}${arch}.${ext}",
+        "dmg": {
+            "title": "Listen 1",
+            "icon": "build/disk.icns",
+            "background": "build/background.png",
+            "iconSize": 80,
+            "contents": [{
+                    "x": 192,
+                    "y": 344
+                },
+                {
+                    "x": 448,
+                    "y": 344,
+                    "type": "link",
+                    "path": "/Applications"
+                }
+            ]
         },
-        {
-          "x": 448,
-          "y": 344,
-          "type": "link",
-          "path": "/Applications"
+        "linux": {
+            "target": [
+                "tar.gz",
+                "appImage",
+                "deb"
+            ]
+        },
+        "nsis": {
+            "runAfterFinish": false,
+            "deleteAppDataOnUninstall": true,
+            "allowToChangeInstallationDirectory": true,
+            "oneClick": false,
+            "installerLanguages": "zh_CN",
+            "language": 2052,
+            "perMachine": true,
+            "createDesktopShortcut": true
+        },
+        "win": {
+            "target": "nsis",
+            "icon": "build/icon.ico"
         }
-      ]
     },
-    "linux": {
-      "target": [
-        "tar.gz",
-        "appImage",
-        "deb"
-      ]
+    "devDependencies": {
+        "electron": "^3.0.8",
+        "electron-builder": "^19.56.2",
+        "electron-rebuild": "^1.8.2"
     },
-    "nsis": {
-      "runAfterFinish": false,
-      "deleteAppDataOnUninstall": true,
-      "allowToChangeInstallationDirectory": true,
-      "oneClick": false,
-      "installerLanguages": "zh_CN",
-      "language": 2052,
-      "perMachine": true,
-      "createDesktopShortcut": true
-    },
-    "win": {
-      "target": "nsis",
-      "icon": "build/icon.ico"
+    "dependencies": {
+        "electron-debug": "^1.5.0",
+        "windows10-fluently-vibrancy": "^0.9.2"
     }
-  },
-  "devDependencies": {
-    "electron": "^3.0.8",
-    "electron-builder": "^19.56.2",
-    "electron-rebuild": "^1.8.2"
-  },
-  "dependencies": {
-    "electron-debug": "^1.5.0",
-    "windows10-fluently-vibrancy": "^0.9.2"
-  }
 }

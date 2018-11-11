@@ -1,4 +1,4 @@
-Listen 1 (Chrome Extension) V1.8.0
+Listen 1 (Chrome Extension) V1.8.2
 ==========
 （最后更新于2018年06月15日）
 

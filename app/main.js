@@ -12,6 +12,7 @@ const BrowserWindow = electron.BrowserWindow
 var path = require('path')
 var iconPath = path.join(__dirname, '/listen1_chrome_extension/images/logo.png');
 
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -29,6 +30,8 @@ function initialTray(mainWindow) {
         var isVisible = mainWindow.isVisible();
         if (isVisible) {
             mainWindow.hide();
+
+            // mainWindow.minimize();
         } else {
             mainWindow.show();
         }
@@ -52,6 +55,7 @@ function initialTray(mainWindow) {
         toggleVisiable();
     });
 }
+
 
 function createWindow() {
 
@@ -78,10 +82,17 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 940,
         height: 600,
-        'webPreferences': { 'nodeIntegration': false },
+        'webPreferences': { 'nodeIntegration': true },
         transparent: true,
         icon: iconPath,
         frame: false
+    });
+    // 开启开发者模式
+    // mainWindow.webContents.openDevTools();
+    mainWindow.on('minimize', function(event) {
+
+        event.preventDefault();
+        mainWindow.hide();
     });
     const electronVibrancy = require('windows10-fluently-vibrancy');
 
@@ -144,6 +155,7 @@ function createWindow() {
     initialTray(mainWindow);
 }
 
+
 function hack_referer_header(details) {
     var refererValue = '';
     if (details.url.indexOf("://music.163.com/") != -1) {
@@ -179,8 +191,6 @@ function hack_referer_header(details) {
     details.requestHeaders = headers;
 };
 
-
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -188,17 +198,31 @@ app.on('ready', createWindow)
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
-        app.quit()
-    }
-})
-
-
-/* 'activate' is emitted when the user clicks the Dock icon (OS X) */
+        // On OS X it is common for applications and their menu bar
+        // to stay active until the user quits explicitly with Cmd + Q
+        if (process.platform !== 'darwin') {
+            app.quit()
+        }
+    })
+    /* 'activate' is emitted when the user clicks the Dock icon (OS X) */
 app.on('activate', () => mainWindow.show());
 
 /* 'before-quit' is emitted when Electron receives 
  * the signal to exit and wants to start closing windows */
 app.on('before-quit', () => willQuitApp = true);
+
+//     function toggleVisiable() {
+//         var isVisible = mainWindow.isVisible();
+//         if (isVisible) {
+//             mainWindow.hide();
+//         } else {
+//             mainWindow.show();
+//         }
+//     }
+
+//     toggleVisiable();
+//     // remote.mainWindow.minimize();
+//     // initialTray(mainWindow).toggleVisiable();
+//     // app.quit();
+//     // remote.getCurrentWindow().close();
+// }

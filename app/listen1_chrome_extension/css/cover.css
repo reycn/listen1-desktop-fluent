@@ -62,8 +62,8 @@ body {
     height: 100%;
     /* For at least Firefox */
     min-height: 100%;
-    -webkit-box-shadow: inset 0 0 600px rgba(0, 0, 0, .9);
-    box-shadow: inset 0 0 600px rgba(0, 0, 0, .9);
+    -webkit-box-shadow: inset 0 0 600px rgba(0, 0, 0, .6);
+    box-shadow: inset 0 0 600px rgba(0, 0, 0, .6);
 }
 
 .site-wrapper-inner {
@@ -118,11 +118,24 @@ body {
     border-bottom: 2px solid transparent;
 }
 
+
+/* .masthead-nav>li>a#minmin {
+    padding-right: 10px;
+    padding-left: 10px;
+} */
+
 .masthead-nav>li>a:hover,
 .masthead-nav>li>a:focus {
     background-color: transparent;
     border-bottom-color: #a9a9a9;
     border-bottom-color: rgba(255, 255, 255, .25);
+}
+
+.masthead-nav>li>a#minmin:hover,
+.masthead-nav>li>a#minmin:focus {
+    background-color: rgba(255, 255, 255, .25);
+    /* border-bottom-color: #a9a9a9; */
+    border-bottom-color: transparent;
 }
 
 .masthead-nav>.active>a,
