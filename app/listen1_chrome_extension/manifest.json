@@ -1,6 +1,6 @@
 {
     "background": {
-        "scripts": ["js/vendor/jquery-2.2.3.min.js", "js/github_api.js", "js/background.js"]
+        "scripts": ["js/vendor/jquery-2.2.3.min.js", "js/github_api.js","js/background.js" ]
     },
     "browser_action": {
         "default_icon": "images/logo.png",
@@ -14,9 +14,9 @@
     },
     "manifest_version": 2,
     "name": "Listen 1",
-    "permissions": ["notifications", "unlimitedStorage", "downloads", "storage", "contextMenus", "tabs", "*://music.163.com/*", "*://*.xiami.com/*", "*://*.qq.com/*", "*://*.kugou.com/", "*://*.kuwo.cn/", "*://api.github.com/*", "*://github.com/*", "webRequest", "webRequestBlocking"],
-    "version": "2",
-    "web_accessible_resources": ["images/*"],
+    "permissions": [ "notifications", "unlimitedStorage", "downloads", "storage", "contextMenus", "tabs", "cookies", "*://music.163.com/*", "*://*.xiami.com/*", "*://*.qq.com/*", "*://*.kugou.com/", "*://*.kuwo.cn/", "*://api.github.com/*", "*://github.com/*", "webRequest", "webRequestBlocking"],
+    "version": "1.9.0",
+    "web_accessible_resources": [ "images/*" ],
     "content_scripts": [{
         "matches": ["https://listen1.github.io/listen1/*"],
         "js": ["js/oauth_callback.js"]

@@ -1,77 +1,107 @@
 var xiami = (function() {
     'use strict';
-
-    function caesar(location) {
+    function caesar(location){
         var num = location[0];
         var avg_len = Math.floor(location.slice(1).length / num);
         var remainder = location.slice(1).length % num;
 
         var result = [];
-        for (var i = 0; i < remainder; i++) {
+        for (var i=0; i<remainder; i++) {
             var line = location.slice(i * (avg_len + 1) + 1, (i + 1) * (avg_len + 1) + 1);
             result.push(line);
         }
 
-        for (var i = 0; i < num - remainder; i++) {
+        for (var i=0; i<num-remainder; i++) {
             var line = location.slice((avg_len + 1) * remainder).slice(i * avg_len + 1, (i + 1) * avg_len + 1);
             result.push(line);
         }
 
         var s = [];
-        for (var i = 0; i < avg_len; i++) {
-            for (var j = 0; j < num; j++) {
+        for (var i=0; i< avg_len; i++) {
+            for (var j=0; j<num; j++){
                 s.push(result[j][i]);
             }
         }
 
-        for (var i = 0; i < remainder; i++) {
+        for (var i=0; i<remainder; i++) {
             s.push(result[i].slice(-1));
         }
 
         return unescape(s.join('')).replace(/\^/g, '0');
     }
 
-    function handleProtocolRelativeUrl(url) {
+    function handleProtocolRelativeUrl(url){
         var regex = /^.*?\/\//;
         var result = url.replace(regex, 'http://');
         return result;
     }
 
-    function xm_retina_url(s) {
+    function xm_retina_url(s){
         if (s.slice(-6, -4) == '_1') {
             return s.slice(0, -6) + s.slice(-4);
         }
         return s;
     }
 
-    var xm_show_playlist = function(url, hm) {
-        var offset = getParameterByName("offset", url)
-        var page = offset / 30 + 1
+    function xm_ensure_cookie(callback){
+        var domain = 'https://www.xiami.com';
+        var name = 'xm_sg_tk';
+        chrome.cookies.get({"url": domain, "name": name}, function(cookie) {
+            if (cookie == null) {
+                var xhr = new XMLHttpRequest();
 
-        var target_url = 'http://www.xiami.com/collect/recommend/page/' + page;
+                xhr.open("GET", "https://www.xiami.com", false);
+                xhr.send();
+
+                var result = xhr.responseText;
+                chrome.cookies.get({"url": domain, "name": name}, function(cookie) {
+                    callback(cookie.value);
+                });
+            }
+            else {
+                callback(cookie.value);
+            }
+        });
+    }
+
+    function xm_get_api_url(api, params, token) {
+        var params_string = JSON.stringify(params);
+        var origin = token.split('_')[0] + '_xmMain_' + api + '_' + params_string;
+        var sign = MD5(origin);
+        var baseUrl = 'https://www.xiami.com';
+        return encodeURI(baseUrl + api + '?_q=' + params_string + '&_s=' + sign);
+    }
+
+    var xm_show_playlist = function(url, hm) {
+        var offset = getParameterByName("offset",url);
+        var page = offset/30 + 1;
+        var pageSize = 60;
 
         return {
             success: function(fn) {
                 var result = [];
-                hm.get(target_url).then(function(response) {
-                    var data = response.data;
-                    data = $.parseHTML(data);
-                    $(data).find('.block_list ul li').each(function() {
-                        var default_playlist = {
-                            'cover_img_url': '',
-                            'title': '',
-                            'id': '',
-                            'source_url': ''
-                        };
-                        default_playlist.cover_img_url = handleProtocolRelativeUrl($(this).find('img')[0].src);
-                        default_playlist.title = $(this).find('h3 a')[0].title;
-                        var xiami_url = $(this).find('h3 a')[0].href;
-                        var list_id = xiami_url.split('?')[0].split('/').pop()
-                        default_playlist.id = 'xmplaylist_' + list_id;
-                        default_playlist.source_url = 'http://www.xiami.com/collect/' + list_id;
-                        result.push(default_playlist);
+                xm_ensure_cookie(function(token){
+                    var api = '/api/list/collect';
+                    var params = {"pagingVO":{"page":page,"pageSize":pageSize},"dataType":"system"};
+                    var url = xm_get_api_url(api, params, token);
+                    hm.get(url).then(function(response) {
+                        for(var i=0; i<response.data.result.data.collects.length; i++) {
+                            var d = response.data.result.data.collects[i];
+                            var default_playlist = {
+                                'cover_img_url' : '',
+                                'title': '',
+                                'id': '',
+                                'source_url': ''
+                            };
+                            default_playlist.cover_img_url = d.collectLogo;
+                            default_playlist.title = d.collectName;
+                            var list_id = d.listId;
+                            default_playlist.id = 'xmplaylist_' + list_id;
+                            default_playlist.source_url = 'http://www.xiami.com/collect/' + list_id;
+                            result.push(default_playlist);
+                        }
+                        return fn({"result":result});
                     });
-                    return fn({ "result": result });
                 });
             }
         };
@@ -82,32 +112,26 @@ var xiami = (function() {
 
         return {
             success: function(fn) {
-                var target_url = 'http://api.xiami.com/web?v=2.0&app_key=1&id=' + list_id +
-                    '&callback=jsonp122&r=collect/detail';
-                hm({
-                        url: target_url,
-                        method: 'GET',
-                        transformResponse: undefined
-                    })
-                    .then(function(response) {
-                        var data = response.data;
-                        data = data.slice('jsonp122('.length, -')'.length);
-                        data = JSON.parse(data);
-
+                xm_ensure_cookie(function(token){
+                    var api = '/api/collect/initialize';
+                    var params = {"listId": parseInt(list_id)};
+                    var url = xm_get_api_url(api, params, token);
+                    hm.get(url).then(function(response) {
+                        var collect = response.data.result.data.collectDetail;
                         var info = {
-                            'cover_img_url': data.data.logo,
-                            'title': data.data.collect_name,
+                            'cover_img_url': collect.collectLogo,
+                            'title': collect.collectName,
                             'id': 'xmplaylist_' + list_id,
                             'source_url': 'http://www.xiami.com/collect/' + list_id
                         };
-
                         var tracks = [];
-                        $.each(data.data.songs, function(index, item) {
-                            var track = xm_convert_song(item, 'artist_name');
+                        $.each(response.data.result.data.collectSongs, function(index, item){
+                            var track = xm_convert_song2(item, 'artist_name');
                             tracks.push(track);
                         });
-                        return fn({ "tracks": tracks, "info": info });
+                        return fn({"tracks":tracks, "info":info});
                     });
+                });
             }
         };
     }
@@ -148,28 +172,48 @@ var xiami = (function() {
         return track;
     }
 
+    function xm_convert_song2(song_info, artist_field_name) {
+        var track = {
+            'id': 'xmtrack_' + song_info.songId,
+            'title': song_info.songName,
+            'artist': song_info.artistName,
+            'artist_id': 'xmartist_' + song_info.artistId,
+            'album': song_info.albumName,
+            'album_id': 'xmalbum_' + song_info.albumId,
+            'source': 'xiami',
+            'source_url': 'http://www.xiami.com/song/' + song_info.songId,
+            'img_url': song_info.albumLogo,
+            'url': 'xmtrack_' + song_info.songId,
+            //'lyric_url': song_info.lyricInfo.lyricFile
+        };
+        if (song_info.lyricInfo != undefined) {
+            track.lyric_url = song_info.lyricInfo.lyricFile;
+        }
+        return track;
+    }
+
     var xm_search = function(url, hm, se) {
         return {
             success: function(fn) {
                 var keyword = getParameterByName('keywords', url);
                 var curpage = getParameterByName('curpage', url);
-                var target_url = 'http://api.xiami.com/web?v=2.0&app_key=1&key=' + keyword + '&page=' + curpage + '&limit=20&callback=jsonp154&r=search/songs';
+                var target_url = 'http://api.xiami.com/web?v=2.0&app_key=1&key=' + keyword + '&page='+ curpage +'&limit=20&callback=jsonp154&r=search/songs';
                 hm({
-                        url: target_url,
-                        method: 'GET',
-                        transformResponse: undefined
-                    })
-                    .then(function(response) {
-                        var data = response.data;
-                        data = data.slice('jsonp154('.length, -')'.length);
-                        data = JSON.parse(data);
-                        var tracks = [];
-                        $.each(data.data.songs, function(index, item) {
-                            var track = xm_convert_song(item, 'artist_name');
-                            tracks.push(track);
-                        });
-                        return fn({ "result": tracks, "total": data.data.total });
+                    url:target_url,
+                    method: 'GET',
+                    transformResponse: undefined
+                })
+                .then(function(response) {
+                    var data = response.data;
+                    data = data.slice('jsonp154('.length, -')'.length);
+                    data = JSON.parse(data);
+                    var tracks = [];
+                    $.each(data.data.songs, function(index, item){
+                        var track = xm_convert_song(item, 'artist_name');
+                        tracks.push(track);
                     });
+                    return fn({"result":tracks,"total":data.data.total});
+                });
             }
         };
     }
@@ -179,36 +223,36 @@ var xiami = (function() {
             success: function(fn) {
                 var album_id = getParameterByName('list_id', url).split('_').pop();
                 var target_url = 'http://api.xiami.com/web?v=2.0&app_key=1&id=' + album_id +
-                    '&page=1&limit=20&callback=jsonp217&r=album/detail';
+                '&page=1&limit=20&callback=jsonp217&r=album/detail';
                 hm({
-                        url: target_url,
-                        method: 'GET',
-                        transformResponse: undefined
-                    })
-                    .then(function(response) {
-                        var data = response.data;
-                        data = data.slice('jsonp217('.length, -')'.length);
-                        data = JSON.parse(data);
+                    url:target_url,
+                    method: 'GET',
+                    transformResponse: undefined
+                })
+                .then(function(response) {
+                    var data = response.data;
+                    data = data.slice('jsonp217('.length, -')'.length);
+                    data = JSON.parse(data);
 
-                        var info = {
-                            'cover_img_url': data.data.album_logo,
-                            'title': data.data.album_name,
-                            'id': 'xmalbum_' + data.data.album_id,
-                            'source_url': 'http://www.xiami.com/album/' + data.data.album_id
-                        };
+                    var info = {
+                        'cover_img_url': data.data.album_logo,
+                        'title': data.data.album_name,
+                        'id': 'xmalbum_' + data.data.album_id,
+                        'source_url': 'http://www.xiami.com/album/' + data.data.album_id
+                    };
 
-                        var tracks = [];
-                        $.each(data.data.songs, function(index, item) {
-                            var track = xm_convert_song(item, 'singers');
-                            tracks.push(track);
-                        });
-                        return fn({ "tracks": tracks, "info": info });
+                    var tracks = [];
+                    $.each(data.data.songs, function(index, item){
+                        var track = xm_convert_song(item, 'singers');
+                        tracks.push(track);
                     });
+                    return fn({"tracks":tracks,"info": info});
+                });
             }
         };
     }
 
-    var xm_artist = function(url, hm, se) {
+    var xm_artist = function (url, hm, se) {
         return {
             success: function(fn) {
                 var artist_id = getParameterByName('list_id', url).split('_').pop();
@@ -218,7 +262,26 @@ var xiami = (function() {
                     '&callback=jsonp217&r=artist/detail';
 
                 hm({
-                        url: target_url,
+                    url:target_url,
+                    method: 'GET',
+                    transformResponse: undefined
+                })
+                .then(function(response) {
+                    var data = response.data;
+                    data = data.slice('jsonp217('.length, -')'.length);
+                    data = JSON.parse(data);
+
+                    var info = {
+                        'cover_img_url': xm_retina_url(data.data.logo),
+                        'title': data.data.artist_name,
+                        'id': 'xmartist_' + artist_id,
+                        'source_url': 'http://www.xiami.com/artist/' + artist_id
+                    };
+
+                    target_url = 'http://api.xiami.com/web?v=2.0&app_key=1&id=' + artist_id +
+                        '&page=1&limit=20&callback=jsonp217&r=artist/hot-songs'
+                    hm({
+                        url:target_url,
                         method: 'GET',
                         transformResponse: undefined
                     })
@@ -227,39 +290,20 @@ var xiami = (function() {
                         data = data.slice('jsonp217('.length, -')'.length);
                         data = JSON.parse(data);
 
-                        var info = {
-                            'cover_img_url': xm_retina_url(data.data.logo),
-                            'title': data.data.artist_name,
-                            'id': 'xmartist_' + artist_id,
-                            'source_url': 'http://www.xiami.com/artist/' + artist_id
-                        };
-
-                        target_url = 'http://api.xiami.com/web?v=2.0&app_key=1&id=' + artist_id +
-                            '&page=1&limit=20&callback=jsonp217&r=artist/hot-songs'
-                        hm({
-                                url: target_url,
-                                method: 'GET',
-                                transformResponse: undefined
-                            })
-                            .then(function(response) {
-                                var data = response.data;
-                                data = data.slice('jsonp217('.length, -')'.length);
-                                data = JSON.parse(data);
-
-                                var tracks = [];
-                                $.each(data.data, function(index, item) {
-                                    var track = xm_convert_song(item, 'singers');
-                                    track.artist_id = 'xmartist_' + artist_id;
-                                    tracks.push(track);
-                                });
-                                return fn({ "tracks": tracks, "info": info });
-                            });
+                        var tracks = [];
+                        $.each(data.data, function(index, item){
+                            var track = xm_convert_song(item, 'singers');
+                            track.artist_id = 'xmartist_' + artist_id;
+                            tracks.push(track);
+                        });
+                        return fn({"tracks":tracks,"info": info});
                     });
+                });
             }
         };
     }
 
-    var xm_lyric = function(url, hm, se) {
+    var xm_lyric = function (url, hm, se) {
         var track_id = getParameterByName('track_id', url).split('_').pop();
         var lyric_url = getParameterByName('lyric_url', url);
         return {
@@ -270,7 +314,7 @@ var xiami = (function() {
                     transformResponse: undefined
                 }).then(function(response) {
                     var data = response.data;
-                    return fn({ "lyric": data });
+                    return fn({"lyric":data});
                 });
             }
         };
@@ -281,30 +325,30 @@ var xiami = (function() {
         var match = /\/\/www.xiami.com\/collect\/([0-9]+)/.exec(url);
         if (match != null) {
             var playlist_id = match[1];
-            result = { 'type': 'playlist', 'id': 'xmplaylist_' + playlist_id };
+            result = {'type': 'playlist', 'id': 'xmplaylist_' + playlist_id};
         }
         return result;
     }
 
-    var get_playlist = function(url, hm, se) {
-        var list_id = getParameterByName('list_id', url).split('_')[0];
-        if (list_id == 'xmplaylist') {
-            return xm_get_playlist(url, hm, se);
-        }
-        if (list_id == 'xmalbum') {
-            return xm_album(url, hm, se);
-        }
-        if (list_id == 'xmartist') {
-            return xm_artist(url, hm, se);
-        }
+var get_playlist = function(url, hm, se) {
+    var list_id = getParameterByName('list_id', url).split('_')[0];
+    if (list_id == 'xmplaylist') {
+        return xm_get_playlist(url, hm, se);
     }
-    return {
-        show_playlist: xm_show_playlist,
-        get_playlist: get_playlist,
-        parse_url: xm_parse_url,
-        bootstrap_track: xm_bootstrap_track,
-        search: xm_search,
-        lyric: xm_lyric,
-    };
+    if (list_id == 'xmalbum') {
+        return xm_album(url, hm, se);
+    }
+    if (list_id == 'xmartist') {
+        return xm_artist(url, hm, se);
+    }
+}
+return {
+    show_playlist: xm_show_playlist,
+    get_playlist: get_playlist,
+    parse_url: xm_parse_url,
+    bootstrap_track: xm_bootstrap_track,
+    search: xm_search,
+    lyric: xm_lyric,
+};
 
 })();
