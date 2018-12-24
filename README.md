@@ -3,7 +3,7 @@ Listen 1 音乐播放器（Windows 毛玻璃版）
 
 Listen 1可以搜索和播放来自网易云音乐，虾米，QQ音乐三个主流音乐网站的歌曲，让你的曲库更全面。并支持收藏功能，方便的创建自己的歌单。
 
-<img src="https://i.imgur.com/sVxqJjv.png">
+<img src="https://i.imgur.com/6WbDbTm.gif">
   
 本版和[原版](https://github.com/listen1/listen1_desktop/releases/tag/v2.0.0)对比：
 ---- 
