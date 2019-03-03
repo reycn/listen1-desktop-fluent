@@ -1,0 +1,4 @@
+# Folder view configuration files
+.DS_Store
+
+node_modules
