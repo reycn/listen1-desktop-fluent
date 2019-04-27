@@ -12,18 +12,22 @@ Listen 1 可以搜索和播放来自网易云音乐、虾米音乐、QQ音乐、
 - 添加 空格键 暂停/继续 播放快捷键（非全局不会占用）
 - UI 细节透明适配
   
-最近更新 (2019-2-27) [ [Version 2.1.4](https://github.com/oyrx/listen1_desktop_fluent/releases/tag/2.1.4) ]：
+最近更新 (2019-4-27) [ [Version 2.1.6](https://github.com/oyrx/listen1_desktop_fluent/releases/tag/2.1.6) ]：
 ----
 - 同步原版改动
-- 修复 QQ 音乐等歌单展示和播放问题
+- 修复虾米音乐播放问题
 
 历史更新
 ----
 
+[2.1.4](https://github.com/oyrx/listen1_desktop_fluent/releases/tag/2.1.2)
+- 同步原版改动
+- 修复 QQ 音乐等歌单展示和播放问题
+ 
 [2.1.2](https://github.com/oyrx/listen1_desktop_fluent/releases/tag/2.1.2)
 - 同步原版改动
 - 修复一些小bug
-
+ 
 [2.1.1](https://github.com/oyrx/listen1_desktop_fluent/releases/tag/2.1.1)
 - 修正文本错误
 - 修改READ.ME

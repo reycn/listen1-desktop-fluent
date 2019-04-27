@@ -29,27 +29,32 @@ function initialTray(mainWindow) {
     var trayIconPath = path.join(__dirname, '/resources/logo_16.png');
     appTray = new Tray(trayIconPath);
 
-  function toggleVisiable() {
-    var isVisible = mainWindow.isVisible();
-    if (isVisible) {
-      mainWindow.hide();
-    } else {
-      mainWindow.show();
+    function toggleVisiable() {
+        var isVisible = mainWindow.isVisible();
+        if (isVisible) {
+            mainWindow.hide();
+        } else {
+            mainWindow.show();
+        }
     }
-  }
-  const contextMenu = Menu.buildFromTemplate([
-    {label: '显示/隐藏窗口',  click(){
-      toggleVisiable();
-    }},
-    {label: '退出',  click() {
-      app.quit(); 
-    }},
-  ]);
-  //appTray.setToolTip('This is my application.');
-  appTray.setContextMenu(contextMenu);
-  appTray.on('click', function handleClicked () {
-    toggleVisiable();
-  });
+    const contextMenu = Menu.buildFromTemplate([{
+            label: '显示/隐藏窗口',
+            click() {
+                toggleVisiable();
+            }
+        },
+        {
+            label: '退出',
+            click() {
+                app.quit();
+            }
+        },
+    ]);
+    //appTray.setToolTip('This is my application.');
+    appTray.setContextMenu(contextMenu);
+    appTray.on('click', function handleClicked() {
+        toggleVisiable();
+    });
 }
 
 function setKeyMapping(key, message) {
@@ -77,22 +82,22 @@ function createWindow() {
 
     const session = require('electron').session;
 
-  const filter = {
-    urls: ["*://music.163.com/*", "*://*.xiami.com/*", "*://i.y.qq.com/*", "*://c.y.qq.com/*", "*://*.kugou.com/*", "*://*.bilibili.com/*", "*://*.githubusercontent.com/*",
-      "https://listen1.github.io/listen1/callback.html?code=*"]
-  };
+    const filter = {
+        urls: ["*://music.163.com/*", "*://*.xiami.com/*", "*://i.y.qq.com/*", "*://c.y.qq.com/*", "*://*.kugou.com/*", "*://*.bilibili.com/*", "*://*.githubusercontent.com/*",
+            "https://listen1.github.io/listen1/callback.html?code=*"
+        ]
+    };
 
-  session.defaultSession.webRequest.onBeforeSendHeaders(filter, function(details, callback) {
-    if(details.url.startsWith("https://listen1.github.io/listen1/callback.html?code=")){
-      const url = details.url;
-      const code = url.split('=')[1];
-      mainWindow.webContents.executeJavaScript('Github.handleCallback("'+code+'");');
-    }
-    else {
-      hack_referer_header(details); 
-    }
-    callback({cancel: false, requestHeaders: details.requestHeaders});
-  });
+    session.defaultSession.webRequest.onBeforeSendHeaders(filter, function(details, callback) {
+        if (details.url.startsWith("https://listen1.github.io/listen1/callback.html?code=")) {
+            const url = details.url;
+            const code = url.split('=')[1];
+            mainWindow.webContents.executeJavaScript('Github.handleCallback("' + code + '");');
+        } else {
+            hack_referer_header(details);
+        }
+        callback({ cancel: false, requestHeaders: details.requestHeaders });
+    });
 
     // var transparent = false;
     // if (process.platform == 'darwin') {
@@ -112,12 +117,12 @@ function createWindow() {
         hasShadow: true,
     });
     // 打开开发者工具
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
 
     const electronVibrancy = require('windows10-fluently-vibrancy');
 
     electronVibrancy.enableVibrancy(mainWindow, 2);
-    // mainWindow.webContents.openDevTools();
+
 
     mainWindow.on('close', (e) => {
         if (willQuitApp) {
@@ -135,9 +140,9 @@ function createWindow() {
     });
 
 
-  // and load the index.html of the app.
-  var ua = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36';
-  mainWindow.loadURL(`file://${__dirname}/listen1_chrome_extension/listen1.html`, {userAgent: ua})
+    // and load the index.html of the app.
+    var ua = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36';
+    mainWindow.loadURL(`file://${__dirname}/listen1_chrome_extension/listen1.html`, { userAgent: ua })
 
     // Open the DevTools.
     // mainWindow.webContents.openDevTools()
@@ -150,25 +155,26 @@ function createWindow() {
         mainWindow = null
     })
 
-  // define global menu content, also add support for cmd+c and cmd+v shortcuts
-  var template = [{
-      label: "Application",
-      submenu: [
-          { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
-          { type: "separator" },
-          { label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); }}
-      ]}, {
-      label: "Edit",
-      submenu: [
-          { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
-          { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-          { type: "separator" },
-          { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
-          { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
-          { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-          { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
-      ]}
-  ];
+    // define global menu content, also add support for cmd+c and cmd+v shortcuts
+    var template = [{
+        label: "Application",
+        submenu: [
+            { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
+            { type: "separator" },
+            { label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); } }
+        ]
+    }, {
+        label: "Edit",
+        submenu: [
+            { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+            { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+            { type: "separator" },
+            { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+            { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+            { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+            { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+        ]
+    }];
 
     mainWindow.setMenu(null);
 
@@ -178,7 +184,7 @@ function createWindow() {
 }
 
 function hack_referer_header(details) {
-  console.log(details);
+    console.log(details);
     let replace_referer = true;
     let replace_origin = true;
     let add_referer = true;
@@ -245,29 +251,25 @@ function hack_referer_header(details) {
 
 
 ipcMain.on('control', (event, arg) => {
-  // console.log(arg);
-  if(arg == 'enable_global_shortcut') {
-    enableGlobalShortcuts();
-  }
-  else if(arg == 'disable_global_shortcut') {
-    disableGlobalShortcuts();
-  }
-  else if(arg == 'window_min') {
-    mainWindow.minimize();
-  }
-  else if(arg == 'window_max') {
-    if(windowState.maximized == true) {
-        windowState.maximized = false;
-        mainWindow.unmaximize();
-      } else {
-        windowState.maximized = true;
-        mainWindow.maximize();
-      }
-  }
-  else if(arg == 'window_close') {
-    mainWindow.close();
-  }
-  // event.sender.send('asynchronous-reply', 'pong')
+    // console.log(arg);
+    if (arg == 'enable_global_shortcut') {
+        enableGlobalShortcuts();
+    } else if (arg == 'disable_global_shortcut') {
+        disableGlobalShortcuts();
+    } else if (arg == 'window_min') {
+        mainWindow.minimize();
+    } else if (arg == 'window_max') {
+        if (windowState.maximized == true) {
+            windowState.maximized = false;
+            mainWindow.unmaximize();
+        } else {
+            windowState.maximized = true;
+            mainWindow.maximize();
+        }
+    } else if (arg == 'window_close') {
+        mainWindow.close();
+    }
+    // event.sender.send('asynchronous-reply', 'pong')
 })
 
 

@@ -14,7 +14,12 @@
     <link href="css/hotkeys.css" rel="stylesheet">
     <link href="css/icon.css" rel="stylesheet">
     <link href="css/iparanoid.css" rel="stylesheet">
-    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
     <script type="text/javascript" src="js/vendor/angular.min.js"></script>
     <script src="js/vendor/angular-translate.min.js"></script>
     <script src="js/vendor/angular-translate-loader-static-files.min.js"></script>
@@ -41,7 +46,9 @@
     <script type="text/javascript" src="js/loweb.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
 
-    <script>if (window.module) module = window.module;</script>
+    <script>
+        if (window.module) module = window.module;
+    </script>
 </head>
 
 <body>
@@ -138,58 +145,59 @@
                         </div>
                     </div>
 
-        <div class="main" ng-controller="MyPlayListController">
-            <div class="sidebar">
-                <div class="flex-scroll-wrapper">
-                <div class="menu-control"></div>
-                <div class="menu-title"><div class="title">{{_PLATFORM_UNION}}</div></div>
-                <ul class="nav masthead-nav">
-                    <li ng-class="{ 'active':(current_tag==2) && (window_url_stack.length ==0) }" ng-click="showTag(2)"><span class="icon li-featured-list"></span><a>{{_PLAYLISTS}}</a></li>
-                </ul>
-                <div class="menu-title" ng-init="loadMyPlaylist();">
-                  <div class="title">{{_MY_MUSIC}}</div>
-                  <svg class="feather icon" ng-click="showDialog(5)"><use xlink:href="images/feather-sprite.svg#plus-square"></use></svg></div>
-                <ul class="nav masthead-nav">
-                    <li ng-repeat="i in myplaylists track by $index" ng-class="{ 'active':window_type=='list' && (('/playlist?list_id='+i.info.id)==window_url_stack[window_url_stack.length-1]) }" ng-click="showPlaylist(i.info.id)"><svg class="feather"><use xlink:href="images/feather-sprite.svg#disc"></use></svg><a>{{i.info.title}}</a></li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="content" ng-controller="InstantSearchController">
-                <div class="navigation">
-                    <div class="backfront">
-                      <span class="icon li-back" ng-click="popWindow()"></span>
-                      <span class="icon li-advance" ng-click="forwardWindow()"></span>
-                    </div>
-                    <div class="search">
-                    <input class="form-control search-input"
-                        id="search-input" type="text" ng-model="keywords" placeholder="{{_SEARCH_PLACEHOLDER}}" ng-model-options="{debounce: 500}">
-                    </div>
-                    <div ng-class="{ 'active': (current_tag==4) && (window_url_stack.length ==0)}" ng-click="showTag(4)" class="settings">
-                      <span class="icon li-setting"></span>
-                    </div>
-                    <div ng-if="!isChrome && !isMac" class="window-control">
-                      <svg class="feather" window-control="window_min"><use xlink:href="images/feather-sprite.svg#minimize-2"></use></svg>
-                      <svg class="feather" window-control="window_max"><use xlink:href="images/feather-sprite.svg#maximize" ></use></svg>
-                      <svg class="feather" window-control="window_close"><use xlink:href="images/feather-sprite.svg#x"></use></svg>
-                    </div>
-                </div>
-                <div class="browser flex-scroll-wrapper" infinite-scroll="scrolling()" content-selector="'#playlist-content'">
-                    <!-- hot playlist window-->
-                    <div class="page page-hot-playlist" ng-show="current_tag==2 && is_window_hidden==1" ng-controller="PlayListController" ng-init="loadPlaylist();">
-                        <div class="source-list" ng-show="is_window_hidden==1">
-                            <div class="source-button" ng-class="{'active':isActiveTab(0)}" ng-click="changeTab(0)">{{_NETEASE_MUSIC}}</div>
-                            <div class="splitter"></div>
-                            <div class="source-button" ng-class="{'active':isActiveTab(1)}" ng-click="changeTab(1)">{{_XIAMI_MUSIC}}</div>
-                            <div class="splitter"></div>
-                            <div class="source-button" ng-class="{'active':isActiveTab(2)}" ng-click="changeTab(2)">{{_QQ_MUSIC}}</div>
-                            <div class="splitter"></div>
-                            <div class="source-button" ng-class="{'active':isActiveTab(4)}" ng-click="changeTab(4)">{{_KUGOU_MUSIC}}</div>
-                            <div class="splitter"></div>
-                            <div class="source-button" ng-class="{'active':isActiveTab(5)}" ng-click="changeTab(5)">{{_KUWO_MUSIC}}</div>
-                            <div class="splitter"></div>
-                            <div class="source-button" ng-class="{'active':isActiveTab(6)}" ng-click="changeTab(6)">{{_BILIBILI_MUSIC}}</div>
+                    <div class="main" ng-controller="MyPlayListController">
+                        <div class="sidebar">
+                            <div class="flex-scroll-wrapper">
+                                <div class="menu-control"></div>
+                                <div class="menu-title">
+                                    <div class="title">{{_PLATFORM_UNION}}</div>
+                                </div>
+                                <ul class="nav masthead-nav">
+                                    <li ng-class="{ 'active':(current_tag==2) && (window_url_stack.length ==0) }" ng-click="showTag(2)"><span class="icon li-featured-list"></span><a>{{_PLAYLISTS}}</a></li>
+                                </ul>
+                                <div class="menu-title" ng-init="loadMyPlaylist();">
+                                    <div class="title">{{_MY_MUSIC}}</div>
+                                    <svg class="feather icon" ng-click="showDialog(5)"><use xlink:href="images/feather-sprite.svg#plus-square"></use></svg></div>
+                                <ul class="nav masthead-nav">
+                                    <li ng-repeat="i in myplaylists track by $index" ng-class="{ 'active':window_type=='list' && (('/playlist?list_id='+i.info.id)==window_url_stack[window_url_stack.length-1]) }" ng-click="showPlaylist(i.info.id)"><svg class="feather"><use xlink:href="images/feather-sprite.svg#disc"></use></svg><a>{{i.info.title}}</a></li>
+                                </ul>
+                            </div>
                         </div>
+
+                        <div class="content" ng-controller="InstantSearchController">
+                            <div class="navigation">
+                                <div class="backfront">
+                                    <span class="icon li-back" ng-click="popWindow()"></span>
+                                    <span class="icon li-advance" ng-click="forwardWindow()"></span>
+                                </div>
+                                <div class="search">
+                                    <input class="form-control search-input" id="search-input" type="text" ng-model="keywords" placeholder="{{_SEARCH_PLACEHOLDER}}" ng-model-options="{debounce: 500}">
+                                </div>
+                                <div ng-class="{ 'active': (current_tag==4) && (window_url_stack.length ==0)}" ng-click="showTag(4)" class="settings">
+                                    <span class="icon li-setting"></span>
+                                </div>
+                                <div ng-if="!isChrome && !isMac" class="window-control">
+                                    <svg class="feather" window-control="window_min"><use xlink:href="images/feather-sprite.svg#minimize-2"></use></svg>
+                                    <svg class="feather" window-control="window_max"><use xlink:href="images/feather-sprite.svg#maximize" ></use></svg>
+                                    <svg class="feather" window-control="window_close"><use xlink:href="images/feather-sprite.svg#x"></use></svg>
+                                </div>
+                            </div>
+                            <div class="browser flex-scroll-wrapper" infinite-scroll="scrolling()" content-selector="'#playlist-content'">
+                                <!-- hot playlist window-->
+                                <div class="page page-hot-playlist" ng-show="current_tag==2 && is_window_hidden==1" ng-controller="PlayListController" ng-init="loadPlaylist();">
+                                    <div class="source-list" ng-show="is_window_hidden==1">
+                                        <div class="source-button" ng-class="{'active':isActiveTab(0)}" ng-click="changeTab(0)">{{_NETEASE_MUSIC}}</div>
+                                        <div class="splitter"></div>
+                                        <div class="source-button" ng-class="{'active':isActiveTab(1)}" ng-click="changeTab(1)">{{_XIAMI_MUSIC}}</div>
+                                        <div class="splitter"></div>
+                                        <div class="source-button" ng-class="{'active':isActiveTab(2)}" ng-click="changeTab(2)">{{_QQ_MUSIC}}</div>
+                                        <div class="splitter"></div>
+                                        <div class="source-button" ng-class="{'active':isActiveTab(4)}" ng-click="changeTab(4)">{{_KUGOU_MUSIC}}</div>
+                                        <div class="splitter"></div>
+                                        <div class="source-button" ng-class="{'active':isActiveTab(5)}" ng-click="changeTab(5)">{{_KUWO_MUSIC}}</div>
+                                        <div class="splitter"></div>
+                                        <div class="source-button" ng-class="{'active':isActiveTab(6)}" ng-click="changeTab(6)">{{_BILIBILI_MUSIC}}</div>
+                                    </div>
 
                                     <div class="site-wrapper-innerd" id="hotplaylist">
                                         <div class="cover-container" id="playlist-content">
@@ -321,7 +329,7 @@
                             <p> Listen 1 {{_HOMEPAGE}}: <a open-url="'http://listen1.github.io/listen1/'"> http://listen1.github.io/listen1/ </a> </p>
                             <p> Listen 1 Fluent {{_HOMEPAGE}}: <a open-url="'https://github.com/oyrx/listen1_desktop_fluent'"> https://github.com/oyrx/listen1_desktop_fluent </a> </p>
                             <p> {{_DESIGNER}}: iparanoid </p>
-                            <p> {{_VERSION}}: 2.1.5 {{_LICENSE_NOTICE}}</p>
+                            <p> {{_VERSION}}: 2.1.6 {{_LICENSE_NOTICE}}</p>
                           </div>
                         </div>
                       </div>
@@ -336,25 +344,24 @@
                                     <h2>{{ playlist_title }}</h2>
                                     <div class="playlist-button-list">
                                         <div class="playlist-button playadd-button" ng-show="playlist_title!=''">
-                                            <div class="play-list" ng-click="playMylist(list_id)"><span class="icon li-play-s"></span>
-                                              {{_PLAY_ALL}}
-                                            </div>
-                                            <div class="add-list" ng-click="addMylist(list_id)"><span class="icon li-add"></span></div>
+                                            <div class="play-list" ng-click="playMylist(list_id)"><span class="icon li-play-s"></span> {{_PLAY_ALL}}
                                         </div>
-                                        <div class="playlist-button clone-button" ng-show="playlist_title!='' && !is_mine" ng-click="clonePlaylist(list_id)">
-                                            <div class="play-list"><span class="icon li-songlist"></span><span>{{_ADD_TO_PLAYLIST}}</span></div>
-                                        </div>
-                                        <div class="playlist-button edit-button" ng-show="playlist_title!='' && is_mine" ng-click="showDialog(3, {list_id: list_id, playlist_title: playlist_title, cover_img_url: cover_img_url})">
-                                            <div class="play-list"><svg class="feather"><use xlink:href="images/feather-sprite.svg#edit"></use></svg><span>{{_EDIT}}</span></div>
-                                        </div>
-                                        <div class="playlist-button edit-button" ng-show="playlist_title!='' && !is_mine" open-url="playlist_source_url">
-                                            <div class="play-list"><span class="icon li-link"></span><span>{{_ORIGIN_LINK}}</span></div>
-                                        </div>
-                                        <div class="playlist-button edit-button" ng-show="playlist_title!='' && is_mine" ng-click="showDialog(6)">
-                                            <div class="play-list"><svg class="feather"><use xlink:href="images/feather-sprite.svg#git-merge"></use></svg><span>{{_IMPORT}}</span></div>
-                                        </div>
+                                        <div class="add-list" ng-click="addMylist(list_id)"><span class="icon li-add"></span></div>
                                     </div>
-                                  </div>
+                                    <div class="playlist-button clone-button" ng-show="playlist_title!='' && !is_mine" ng-click="clonePlaylist(list_id)">
+                                        <div class="play-list"><span class="icon li-songlist"></span><span>{{_ADD_TO_PLAYLIST}}</span></div>
+                                    </div>
+                                    <div class="playlist-button edit-button" ng-show="playlist_title!='' && is_mine" ng-click="showDialog(3, {list_id: list_id, playlist_title: playlist_title, cover_img_url: cover_img_url})">
+                                        <div class="play-list"><svg class="feather"><use xlink:href="images/feather-sprite.svg#edit"></use></svg><span>{{_EDIT}}</span></div>
+                                    </div>
+                                    <div class="playlist-button edit-button" ng-show="playlist_title!='' && !is_mine" open-url="playlist_source_url">
+                                        <div class="play-list"><span class="icon li-link"></span><span>{{_ORIGIN_LINK}}</span></div>
+                                    </div>
+                                    <div class="playlist-button edit-button" ng-show="playlist_title!='' && is_mine" ng-click="showDialog(6)">
+                                        <div class="play-list"><svg class="feather"><use xlink:href="images/feather-sprite.svg#git-merge"></use></svg><span>{{_IMPORT}}</span></div>
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
                         <ul class="detail-songlist">
@@ -393,18 +400,17 @@
                                 <div class="detail-head-title">
                                     <!--<a title="加入收藏" class="clone" ng-click="showDialog(0, currentPlaying)">收藏</a>
 <a open-url="currentPlaying.source_url" title="原始链接" class="link">原始链接</a>--></div>
+                            </div>
+                            <div class="detail-songinfo">
+                                <h2>{{ currentPlaying.title }}</h2>
+                                <div class="info">
+                                    <div class="singer"><span>{{_ARTIST}}： </span><a ng-click="showPlaylist(currentPlaying.artist_id)" title="{{currentPlaying.artist}}">{{ currentPlaying.artist }}</a></div>
+                                    <div class="album"><span>{{_ALBUM}}： </span><a ng-click="showPlaylist(currentPlaying.album_id)" title="{{currentPlaying.album}}">{{ currentPlaying.album }}</a></div>
                                 </div>
-                                <div class="detail-songinfo">
-                                    <h2>{{ currentPlaying.title }}</h2>
-                                    <div class="info">
-                                        <div class="singer"><span>{{_ARTIST}}： </span><a ng-click="showPlaylist(currentPlaying.artist_id)" title="{{currentPlaying.artist}}">{{ currentPlaying.artist }}</a></div>
-                                        <div class="album"><span>{{_ALBUM}}： </span><a ng-click="showPlaylist(currentPlaying.album_id)" title="{{currentPlaying.album}}">{{ currentPlaying.album }}</a></div>
-                                    </div>
-                                    <div class="lyric">
-                                        <div class="placeholder"></div>
-                                        <p ng-repeat="line in lyricArray track by $index" ng-class="{ 'highlight': line.lineNumber == lyricLineNumber }">{{ line.content }} </p>
-                                        <div class="placeholder"></div>
-                                    </div>
+                                <div class="lyric">
+                                    <div class="placeholder"></div>
+                                    <p ng-repeat="line in lyricArray track by $index" ng-class="{ 'highlight': line.lineNumber == lyricLineNumber }">{{ line.content }} </p>
+                                    <div class="placeholder"></div>
                                 </div>
                             </div>
                         </div>
@@ -412,17 +418,17 @@
                 </div>
             </div>
         </div>
-        <div class="footer">
-            <div class="left-control">
-              <span class="icon li-previous" prev-track=""></span>
-              <span class="icon li-play play" ng-class="isPlaying? 'li-pause': 'li-play'"  play-pause-toggle=""></span>
-              <span class="icon li-next" next-track=""></span>
-            </div>
-            <div class="main-info">
-                <div class="logo-banner" ng-if="playlist.length == 0"><svg class="logo" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#666666" stroke="#666666" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polygon points="7 4 7 19 16 19 16 16 10 16 10 4"></polygon><polygon points="13 4 13 13 16 13 16 4"></polygon></svg></div>
-                <img
-                    class="cover" ng-if="playlist.length > 0" ng-src="{{ currentPlaying.img_url }}" ng-click="toggleWindow('/now_playing')">
-                    <div class="detail" ng-if="playlist.length > 0">
+    </div>
+    <div class="footer">
+        <div class="left-control">
+            <span class="icon li-previous" prev-track=""></span>
+            <span class="icon li-play play" ng-class="isPlaying? 'li-pause': 'li-play'" play-pause-toggle=""></span>
+            <span class="icon li-next" next-track=""></span>
+        </div>
+        <div class="main-info">
+            <div class="logo-banner" ng-if="playlist.length == 0"><svg class="logo" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#666666" stroke="#666666" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polygon points="7 4 7 19 16 19 16 16 10 16 10 4"></polygon><polygon points="13 4 13 13 16 13 16 4"></polygon></svg></div>
+            <img class="cover" ng-if="playlist.length > 0" ng-src="{{ currentPlaying.img_url }}" ng-click="toggleWindow('/now_playing')">
+            <div class="detail" ng-if="playlist.length > 0">
 
                 <div class="ctrl">
                     <a ng-click="showDialog(0, currentPlaying)" title="{{_ADD_TO_PLAYLIST}}">
