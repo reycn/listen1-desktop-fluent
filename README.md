@@ -6,13 +6,14 @@ Listen 1 可以搜索和播放来自网易云音乐、虾米音乐、QQ 音乐�
   
 本版和[原版](https://github.com/listen1/listen1_desktop/releases/tag/v2.0.0)对比：
 ---- 
-- 毛玻璃样式、去除无用框线
-- 添加专辑封面浮动动画
+- Fluent Acrylic 窗口、去除无用框线
+- 添加了一些优雅的动画
 - 添加 空格键 暂停/继续 播放快捷键（非全局不会占用）
 - UI 细节透明适配
   
 最近更新 (2019-6-17) [ [Version 2.2.0](https://github.com/oyrx/listen1_desktop_fluent/releases/tag/2.2.0) ]：
 ----
+- 引入 [EWC](https://github.com/23phy/ewc) 模块，真正实现 [Fluent](https://www.microsoft.com/design/fluent/#/) 窗口 ([Issue#11](https://github.com/reycn/listen1_desktop_fluent/issues/11)Fixed)
 - 同步原版改动（修复酷狗、虾米播放问题）
 - 添加动画（很优雅哈哈）、优化CSS代码
 
