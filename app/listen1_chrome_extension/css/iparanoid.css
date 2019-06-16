@@ -10,10 +10,12 @@
     --link-default-color: #999999;
     --link-highlight-color: #111111;
     --line-default-color: #e5e5e5;
-    --sidebar-background-color: rgba(245, 245, 245, 0.7);
-    --content-background-color: #ffffff;
+    --sidebar-background-color: rgba(255, 255, 255, 0.6);
+    --content-background-color: rgba(255, 255, 255, 0.8);
     --foot-background-color: #ffffff;
-    --search-input-background-color: #f2f2f2;
+    --search-input-background-color: rgba(255, 255, 255, 0.5);
+    --content-background-color: rgba(255, 255, 255, 0.8);
+    --content-background-color: rgba(255, 255, 255, 0.8);
     --window-control-border-color: #dddddd;
     --sidebar-highlight-background-color: #4d4d4d;
     --sidebar-highlight-text-color: #ffffff;
@@ -37,7 +39,7 @@ body {
     color: var(--text-default-color);
     font-family: system-ui, "PingFang SC", STHeiti, sans-serif;
     /* // 禁止文字被鼠标选中  */
-    moz-user-select: -moz-none;
+    -moz-user-select: -moz-none;
     -moz-user-select: none;
     -o-user-select: none;
     -khtml-user-select: none;
@@ -48,7 +50,7 @@ body {
 
 .wrap {
     /* border-style: solid;
-    border-color: rgba(255, 255, 255, 0.8);
+    border-color: rgba(255, 255, 255, 0.5);
     border-width: 1px; */
     box-sizing: border-box;
     /* border-radius: 5px; */
@@ -174,7 +176,7 @@ svg:hover {
 }
 
 .main .content {
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--content-background-color);
     flex: 1;
     display: flex;
     flex-direction: column;
