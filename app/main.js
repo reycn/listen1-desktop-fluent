@@ -128,7 +128,7 @@ function createWindow() {
         webPreferences: { nodeIntegration: true },
         icon: iconPath,
         titleBarStyle: "hiddenInset",
-        // backgroundColor: "#00000000",
+        // backgroundColor: "#FFFFFF",
         transparent: true,
         vibrancy: "light",
         frame: false
@@ -140,7 +140,7 @@ function createWindow() {
 
     // const electronVibrancy = require('windows10-fluently-vibrancy');
     const ewc = require("ewc");
-    mainWindow.webContents.openDevTools({ mode: "detach" });
+    // mainWindow.webContents.openDevTools({ mode: "detach" });
     // electronVibrancy.enableVibrancy(mainWindow, 2);
     ewc.setAcrylic(mainWindow, 0x14800020);
     mainWindow.on("close", e => {
