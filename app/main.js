@@ -128,12 +128,9 @@ function createWindow() {
         webPreferences: { nodeIntegration: true },
         icon: iconPath,
         titleBarStyle: "hiddenInset",
-        // backgroundColor: "#FFFFFF",
         transparent: true,
-        vibrancy: "light",
-        frame: false
-            // titleBarStyle: 'hidden',
-            // hasShadow: true
+        frame: false,
+        thickFrame: true, // if transparent, thickFrame == false
     });
     // 打开开发者工具
     // mainWindow.webContents.openDevTools();

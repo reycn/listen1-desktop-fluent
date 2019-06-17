@@ -344,7 +344,7 @@
         -moz-transition: 0.5s ease-out;
         -ms-transition: 0.5s ease-out;
         -o-transition: 0.5s ease-out;
-}
+    }
     
     .playlist-covers .u-cover:hover {
         margin-top: -8px;
@@ -1301,7 +1301,7 @@
         -moz-transition: 0.5s ease-in-out;
         -ms-transition: 0.5s ease-in-out;
         -o-transition: 0.5s ease-in-out;
-}
+    }
     
     .source-list .source-button.active {
         color: #323232;
