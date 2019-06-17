@@ -2,7 +2,7 @@
 
 Listen 1 可以搜索和播放来自网易云音乐、虾米音乐、QQ 音乐、酷狗音乐、酷我音乐、哔哩哔哩音乐六大主流音乐平台歌曲，让你的曲库更全面。并支持收藏功能，方便的创建自己的歌单。
 
-<img src="https://i.imgur.com/sVxqJjv.png">
+<img src="https://i.imgur.com/4FJGvUx.gif">
   
 本版和[原版](https://github.com/listen1/listen1_desktop/releases/tag/v2.0.0)对比：
 ---- 
@@ -80,8 +80,6 @@ Listen 1 可以搜索和播放来自网易云音乐、虾米音乐、QQ 音乐�
 
 ## 更多图片
 
-<img src="https://i.imgur.com/kwElmWb.png">
-<img src="https://i.imgur.com/GLPK8LG.png">
-<img src="https://i.imgur.com/pv9AvHs.png">
-<img src="https://i.imgur.com/QnA0iUo.png">
-<img src="https://i.imgur.com/CMpli2b.png">
+<img src="https://i.imgur.com/BWC3SHB.png">
+<img src="https://i.imgur.com/HQEpd8W.png">
+<img src="https://i.imgur.com/dB3STeS.png">
