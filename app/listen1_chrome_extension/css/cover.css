@@ -17,12 +17,10 @@ a:hover {
 .btn-default,
 .btn-default:hover,
 .btn-default:focus {
-    color: #333;
-    text-shadow: none;
-    /* Prevent inheritence from `body` */
-    background-color: rgba(255, 255, 255, 0.5);
-    /* background-color: #fff; */
-    border: 1px solid #fff;
+  color: #333;
+  text-shadow: none; /* Prevent inheritence from `body` */
+  background-color: #fff;
+  border: 1px solid #fff;
 }
 
 
@@ -48,12 +46,11 @@ body {
 /* Extra markup and styles for table-esque vertical and horizontal centering */
 
 .site-wrapper {
-    display: table;
-    width: 100%;
-    height: 100%;
-    /* For at least Firefox */
-    min-height: 100%;
-    /*  -webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+  display: table;
+  width: 100%;
+  height: 100%; /* For at least Firefox */
+  min-height: 100%;
+/*  -webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.5);
           box-shadow: inset 0 0 100px rgba(0,0,0,.5);*/
 }
 
@@ -91,16 +88,14 @@ body {
 .masthead-nav>li+li {
     margin-left: 20px;
 }
-
-.masthead-nav>li>a {
-    padding-right: 0;
-    padding-left: 0;
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    /* IE8 proofing */
-    color: rgba(255, 255, 255, .75);
-    border-bottom: 2px solid transparent;
+.masthead-nav > li > a {
+  padding-right: 0;
+  padding-left: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff; /* IE8 proofing */
+  color: rgba(255,255,255,.75);
+  border-bottom: 2px solid transparent;
 }
 
 .masthead-nav>li>a:hover,
@@ -146,9 +141,8 @@ body {
  */
 
 .mastfoot {
-    color: #999;
-    /* IE8 proofing */
-    color: rgba(255, 255, 255, .5);
+  color: #999; /* IE8 proofing */
+  color: rgba(255,255,255,.5);
 }
 
 
@@ -157,26 +151,25 @@ body {
  */
 
 @media (min-width: 768px) {
-    /* Pull out the header and footer */
-    .masthead {
-        position: fixed;
-        top: 0;
-    }
-    .mastfoot {
-        position: fixed;
-        bottom: 0;
-    }
-    /* Start the vertical centering */
-    .site-wrapper-inner {
-        vertical-align: middle;
-    }
-    /* Handle the widths */
-    .masthead,
-    .mastfoot,
-    .cover-container {
-        width: 100%;
-        /* Must be percentage or pixels for horizontal alignment */
-    }
+  /* Pull out the header and footer */
+  .masthead {
+    position: fixed;
+    top: 0;
+  }
+  .mastfoot {
+    position: fixed;
+    bottom: 0;
+  }
+  /* Start the vertical centering */
+  .site-wrapper-inner {
+    vertical-align: middle;
+  }
+  /* Handle the widths */
+  .masthead,
+  .mastfoot,
+  .cover-container {
+    width: 100%; /* Must be percentage or pixels for horizontal alignment */
+  }
 }
 
 @media (min-width: 992px) {

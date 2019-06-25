@@ -5,14 +5,14 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable import/no-unresolved */
 const main = () => {
-    Storage.prototype.setObject = function setObject(key, value) {
-        this.setItem(key, JSON.stringify(value));
-    };
+  localStorage.__proto__.setObject = function setObject(key, value) {
+    this.setItem(key, JSON.stringify(value));
+  };
 
-    Storage.prototype.getObject = function getObject(key) {
-        const value = this.getItem(key);
-        return value && JSON.parse(value);
-    };
+  localStorage.__proto__.getObject = function getObject(key) {
+    const value = this.getItem(key);
+    return value && JSON.parse(value);
+  };
 
     const app = angular.module('listenone', ['angularSoundManager', 'ui-notification', 'loWebManager', 'cfp.hotkeys', 'lastfmClient', 'githubClient', 'pascalprecht.translate']);
 
@@ -88,27 +88,30 @@ const main = () => {
         }
     }));
 
-    function getSourceName(sourceId) {
-        if (sourceId === 0) {
-            return 'netease';
-        }
-        if (sourceId === 1) {
-            return 'xiami';
-        }
-        if (sourceId === 2) {
-            return 'qq';
-        }
-        if (sourceId === 4) {
-            return 'kugou';
-        }
-        if (sourceId === 5) {
-            return 'kuwo';
-        }
-        if (sourceId === 6) {
-            return 'bilibili';
-        }
-        return '';
+  function getSourceName(sourceId) {
+    if (sourceId === 0) {
+      return 'netease';
     }
+    if (sourceId === 1) {
+      return 'xiami';
+    }
+    if (sourceId === 2) {
+      return 'qq';
+    }
+    if (sourceId === 4) {
+      return 'kugou';
+    }
+    if (sourceId === 5) {
+      return 'kuwo';
+    }
+    if (sourceId === 6) {
+      return 'bilibili';
+    }
+    if (sourceId === 7) {
+      return 'migu';
+    }
+    return '';
+  }
 
 
     app.controller('TranslateController', ['$scope', '$translate', '$http', ($scope, $translate, $http) => {
@@ -1217,16 +1220,17 @@ const main = () => {
         },
     ]);
 
-    app.controller('InstantSearchController', ['$scope', '$http', '$timeout', '$rootScope', 'angularPlayer', 'loWeb',
-        ($scope, $http, $timeout, $rootScope, angularPlayer, loWeb) => {
-            $scope.originpagelog = [1, 1, 1, 1, 1, 1, 1]; // [网易,虾米,QQ,NULL,酷狗,酷我,bilibili]
-            $scope.tab = 0;
-            $scope.keywords = '';
-            $scope.loading = false;
-            $scope.curpagelog = $scope.originpagelog.slice(0);
-            $scope.totalpagelog = $scope.originpagelog.slice(0);
-            $scope.curpage = 1;
-            $scope.totalpage = 1;
+  app.controller('InstantSearchController', ['$scope', '$http', '$timeout', '$rootScope', 'angularPlayer', 'loWeb',
+    ($scope, $http, $timeout, $rootScope, angularPlayer, loWeb) => {
+      // notice: douban is skipped so array should plus 1
+      $scope.originpagelog = Array(getAllProviders().length+1).fill(1);  // [网易,虾米,QQ,NULL,酷狗,酷我,bilibili, migu]
+      $scope.tab = 0;
+      $scope.keywords = '';
+      $scope.loading = false;
+      $scope.curpagelog = $scope.originpagelog.slice(0);
+      $scope.totalpagelog = $scope.originpagelog.slice(0);
+      $scope.curpage = 1;
+      $scope.totalpage = 1;
 
             function updateCurrentPage(cp) {
                 if (cp === -1) { // when search words changes,pagenums should be reset.

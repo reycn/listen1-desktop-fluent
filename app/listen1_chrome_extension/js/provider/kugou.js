@@ -114,7 +114,7 @@ function build_kugou() {
         item.album_id}`;
       hm.get(target_url).then((res) => {
         const { data: res_data } = res;
-        if (res_data.status && res_data.data !== undefined) {
+        if (res_data.status && res_data.data !== undefined && res_data.data !== null) {
           track.album = res_data.data.albumname;
         } else {
           track.album = '';
@@ -245,24 +245,27 @@ function build_kugou() {
     return (Math.random() * 100).toString().replace(/\D/g, '');
   }
 
-  // eslint-disable-next-line no-unused-vars
+  function getRandomHexString() {
+    let result = '';
+    const letters = '0123456789abcdef';
+    for (let i = 0; i < 16; i += 1) {
+      result += letters[(Math.floor(Math.random() * 16))];
+    }
+    return result;
+  }
+
   function kg_bootstrap_track(sound, track, success, failure, hm, se) {
-    let target_url = 'https://wwwapi.kugou.com/yy/index.php?r=play/getdata';
-    const jQueryHeader = `jQuery1910${getRandomIntString()}_${getTimestampString()}`;
-
     const song_id = track.id.slice('kgtrack_'.length);
-
-    target_url = `${target_url}&callback=${jQueryHeader}&hash=${song_id}&_=${getTimestampString()}`;
+    let target_url = `http://m.kugou.com/app/i/getSongInfo.php?cmd=playInfo&hash=${song_id}`;
 
     hm({
       url: target_url,
       method: 'GET',
       transformResponse: undefined,
     }).then((response) => {
-      let data = response.data.slice(jQueryHeader.length + 1, response.data.length - 2);
-      data = JSON.parse(data);
-      if (data.status === 1) {
-        sound.url = data.data.play_url; // eslint-disable-line no-param-reassign
+      data = JSON.parse(response.data);
+      if (data.url !== '') {
+        sound.url = data.url; // eslint-disable-line no-param-reassign
         success();
       } else {
         failure();
