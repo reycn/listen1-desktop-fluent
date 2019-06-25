@@ -17,7 +17,7 @@ Listen 1 可以搜索和播放来自网易云音乐、虾米音乐、QQ 音乐�
 - 添加 空格键 暂停/继续 播放快捷键（非全局不会占用）
 - UI 细节透明适配
   
-当前更新 (2019-6-25) [ [Version 2.3.1](https://github.com/oyrx/listen1_desktop_fluent/releases/tag/2.3.1) ]：
+当前更新 (2019-6-25) [ [Version 2.3.1](https://github.com/reycn/listen1_desktop_fluent/releases/tag/2.3.1) ]：
 ----
 - 同步[原版改动(v2.3.1)](https://github.com/listen1/listen1_chrome_extension/compare/6fcdce564f...6b7de89d68)
 - 添加咪咕音乐
@@ -26,18 +26,18 @@ Listen 1 可以搜索和播放来自网易云音乐、虾米音乐、QQ 音乐�
 
 ## 最近更新
 
-[2.2.0](https://github.com/oyrx/listen1_desktop_fluent/releases/tag/2.2.0)
+[2.2.0](https://github.com/reycn/listen1_desktop_fluent/releases/tag/2.2.0)
 
 - 引入 [EWC](https://github.com/23phy/ewc) 模块，真正实现 [Fluent](https://www.microsoft.com/design/fluent/#/) 窗口 ([Issue#11](https://github.com/reycn/listen1_desktop_fluent/issues/11)Fixed)
 - 同步原版改动（修复酷狗、虾米播放问题）
 - 添加动画（很优雅哈哈）、优化 CSS 代码
 
-[2.1.6](https://github.com/oyrx/listen1_desktop_fluent/releases/tag/2.1.6)
+[2.1.6](https://github.com/reycn/listen1_desktop_fluent/releases/tag/2.1.6)
 
 - 同步原版改动
 - 修复虾米音乐播放问题
 
-[2.1.4](https://github.com/oyrx/listen1_desktop_fluent/releases/tag/2.1.4)
+[2.1.4](https://github.com/reycn/listen1_desktop_fluent/releases/tag/2.1.4)
 
 - 同步原版改动
 - 修复 QQ 音乐等歌单展示和播放问题
