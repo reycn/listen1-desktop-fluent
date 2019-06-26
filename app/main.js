@@ -131,15 +131,17 @@ function createWindow() {
         transparent: true,
         frame: false,
         thickFrame: true, // if transparent, thickFrame == false
+        show: false,
     });
-    // 打开开发者工具
-    // mainWindow.webContents.openDevTools();
 
-    // const electronVibrancy = require('windows10-fluently-vibrancy');
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show();
+    })
+
     const ewc = require("ewc");
-    // mainWindow.webContents.openDevTools({ mode: "detach" });
-    // electronVibrancy.enableVibrancy(mainWindow, 2);
-    ewc.setAcrylic(mainWindow, 0x14800020);
+    ewc.setAcrylic(mainWindow, 0x00FFFFFF);
+    // 打开开发者工具
+    mainWindow.webContents.openDevTools({ mode: "detach" });
     mainWindow.on("close", e => {
         if (willQuitApp) {
             /* the user tried to quit the app */
@@ -309,19 +311,28 @@ ipcMain.on("control", (event, arg) => {
     // event.sender.send('asynchronous-reply', 'pong')
 });
 
-var shouldQuit = app.makeSingleInstance(function(
+// var shouldQuit = app.makeSingleInstance(function(
+//     commandLine,
+//     workingDirectory
+// ) {
+//     console.log(commandLine, workingDirectory);
+//     // Someone tried to run a second instance, we should focus our window.
+//     if (mainWindow) {
+//         if (mainWindow.isMinimized()) mainWindow.restore();
+//         mainWindow.focus();
+//     }
+// });
+var shouldQuit = app.requestSingleInstanceLock(function(
     commandLine,
     workingDirectory
 ) {
     console.log(commandLine, workingDirectory);
-    // Someone tried to run a second instance, we should focus our window.
     if (mainWindow) {
         if (mainWindow.isMinimized()) mainWindow.restore();
         mainWindow.focus();
     }
 });
-// console.log(shouldQuit);
-if (shouldQuit) {
+if (shouldQuit != true) {
     app.quit();
     return;
 }
@@ -330,7 +341,6 @@ if (shouldQuit) {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", createWindow);
-
 // Quit when all windows are closed.
 app.on("window-all-closed", function() {
     // On OS X it is common for applications and their menu bar
@@ -342,11 +352,10 @@ app.on("window-all-closed", function() {
 
 /* 'activate' is emitted when the user clicks the Dock icon (OS X) */
 app.on("activate", () => mainWindow.show());
-
+app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 /* 'before-quit' is emitted when Electron receives
  * the signal to exit and wants to start closing windows */
 app.on("before-quit", () => (willQuitApp = true));
-
 app.on("will-quit", () => {
     disableGlobalShortcuts();
 });

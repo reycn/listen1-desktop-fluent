@@ -50,8 +50,8 @@
     
     .wrap {
         /* border-style: solid;
-    border-color: rgba(255, 255, 255, 0.5);
-    border-width: 1px; */
+        border-color: var(--line-default-color);
+        border-width: 1px; */
         box-sizing: border-box;
         /* border-radius: 5px; */
     }
@@ -148,9 +148,9 @@
     }
     
     .footer {
-        background: rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.7);
         height: 60px;
-        /* border-top: solid 1px var(--line-default-color); */
+        /* border-bottom: solid 1px var(--line-default-color); */
         display: flex;
         position: relative;
     }
@@ -1321,6 +1321,7 @@
         border: solid 1px #999;
         padding: 0.2em;
         background-color: #eeeeee;
+        margin-top: -0.2em;
     }
     /* .upload-button {
     border: 0;

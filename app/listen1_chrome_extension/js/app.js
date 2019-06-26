@@ -5,14 +5,14 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable import/no-unresolved */
 const main = () => {
-  localStorage.__proto__.setObject = function setObject(key, value) {
-    this.setItem(key, JSON.stringify(value));
-  };
+    localStorage.__proto__.setObject = function setObject(key, value) {
+        this.setItem(key, JSON.stringify(value));
+    };
 
-  localStorage.__proto__.getObject = function getObject(key) {
-    const value = this.getItem(key);
-    return value && JSON.parse(value);
-  };
+    localStorage.__proto__.getObject = function getObject(key) {
+        const value = this.getItem(key);
+        return value && JSON.parse(value);
+    };
 
     const app = angular.module('listenone', ['angularSoundManager', 'ui-notification', 'loWebManager', 'cfp.hotkeys', 'lastfmClient', 'githubClient', 'pascalprecht.translate']);
 
@@ -88,30 +88,30 @@ const main = () => {
         }
     }));
 
-  function getSourceName(sourceId) {
-    if (sourceId === 0) {
-      return 'netease';
+    function getSourceName(sourceId) {
+        if (sourceId === 0) {
+            return 'netease';
+        }
+        if (sourceId === 1) {
+            return 'xiami';
+        }
+        if (sourceId === 2) {
+            return 'qq';
+        }
+        if (sourceId === 4) {
+            return 'kugou';
+        }
+        if (sourceId === 5) {
+            return 'kuwo';
+        }
+        if (sourceId === 6) {
+            return 'bilibili';
+        }
+        if (sourceId === 7) {
+            return 'migu';
+        }
+        return '';
     }
-    if (sourceId === 1) {
-      return 'xiami';
-    }
-    if (sourceId === 2) {
-      return 'qq';
-    }
-    if (sourceId === 4) {
-      return 'kugou';
-    }
-    if (sourceId === 5) {
-      return 'kuwo';
-    }
-    if (sourceId === 6) {
-      return 'bilibili';
-    }
-    if (sourceId === 7) {
-      return 'migu';
-    }
-    return '';
-  }
 
 
     app.controller('TranslateController', ['$scope', '$translate', '$http', ($scope, $translate, $http) => {
@@ -139,7 +139,25 @@ const main = () => {
 
         $scope.setLang(defaultLang);
     }]);
+    app.controller('AcrylicController', ['$scope', '$acrylic', '$window', ($scope, $acrylic, $window) => {
+        let defaultAcry = true;
+        const supportAcry = [true, false];
 
+        const ewc = require("ewc");
+
+
+        $scope.setAcry = () => {
+            // You can change the language during runtime
+
+            const ewc = require("ewc");
+            ewc.setAcrylic($window, 0xFFFFFFFF);
+            localStorage.setObject('acrylic', acryKey);
+
+
+        };
+
+        $scope.setAcry();
+    }]);
     // control main view of page, it can be called any place
     app.controller('NavigationController', ['$scope', '$http',
         '$httpParamSerializerJQLike', '$timeout',
@@ -194,13 +212,13 @@ const main = () => {
                 document.getElementsByClassName('browser')[0].scrollTop = 0;
             };
 
-      $scope.showWindow = (url) => {
-        if ($scope.window_url_stack.length > 0
-          && $scope.window_url_stack[$scope.window_url_stack.length - 1] === url) {
-          return;
-        }
-        $scope.is_window_hidden = 0;
-        $scope.resetWindow();
+            $scope.showWindow = (url) => {
+                if ($scope.window_url_stack.length > 0 &&
+                    $scope.window_url_stack[$scope.window_url_stack.length - 1] === url) {
+                    return;
+                }
+                $scope.is_window_hidden = 0;
+                $scope.resetWindow();
 
                 if ($scope.window_url_stack.length > 0 && $scope.window_url_stack[$scope.window_url_stack.length - 1] === '/now_playing') {
                     // if now playing is top, pop it
@@ -265,13 +283,13 @@ const main = () => {
                 }
             };
 
-      $scope.toggleWindow = (url) => {
-        if ($scope.window_url_stack.length > 0
-          && $scope.window_url_stack[$scope.window_url_stack.length - 1] === url) {
-          return $scope.popWindow();
-        }
-        return $scope.showWindow(url);
-      };
+            $scope.toggleWindow = (url) => {
+                if ($scope.window_url_stack.length > 0 &&
+                    $scope.window_url_stack[$scope.window_url_stack.length - 1] === url) {
+                    return $scope.popWindow();
+                }
+                return $scope.showWindow(url);
+            };
 
             $scope.forwardWindow = () => {
                 if ($scope.window_poped_url_stack.length === 0) {
@@ -479,25 +497,25 @@ const main = () => {
             $scope.removeSongFromPlaylist = (song, list_id) => {
                 const url = '/remove_track_from_myplaylist';
 
-        loWeb.post({
-          url,
-          method: 'POST',
-          data: $httpParamSerializerJQLike({
-            list_id,
-            track_id: song.id,
-          }),
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        }).success(() => {
-          // remove song from songs
-          const index = $scope.songs.indexOf(song);
-          if (index > -1) {
-            $scope.songs.splice(index, 1);
-          }
-          Notification.success($translate.instant('_REMOVE_SONG_FROM_PLAYLIST_SUCCESS'));
-        });
-      };
+                loWeb.post({
+                    url,
+                    method: 'POST',
+                    data: $httpParamSerializerJQLike({
+                        list_id,
+                        track_id: song.id,
+                    }),
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                }).success(() => {
+                    // remove song from songs
+                    const index = $scope.songs.indexOf(song);
+                    if (index > -1) {
+                        $scope.songs.splice(index, 1);
+                    }
+                    Notification.success($translate.instant('_REMOVE_SONG_FROM_PLAYLIST_SUCCESS'));
+                });
+            };
 
             $scope.closeDialog = () => {
                 $scope.is_dialog_hidden = 1;
@@ -1005,17 +1023,19 @@ const main = () => {
 
                     const timeReg = /\[(\d{2,})\:(\d{2})(?:\.(\d{1,3}))?\]/g; // eslint-disable-line no-useless-escape
 
-          let timeRegResult = null;
-          // eslint-disable-next-line no-cond-assign
-          while ((timeRegResult = timeReg.exec(line)) !== null) {
-            timeResult.push({
-              content: $('<a />').html(line.replace(timeRegResult[0], '')).text(),
-              seconds: parseInt(timeRegResult[1], 10) * 60 * 1000 // min
-                + parseInt(timeRegResult[2], 10) * 1000 // sec
-                + (timeRegResult[3] !== null ? parseInt(rightPadding(timeRegResult[3], 3, '0'), 10) : 0), // microsec
-            });
-          }
-        });
+                    let timeRegResult = null;
+                    // eslint-disable-next-line no-cond-assign
+                    while ((timeRegResult = timeReg.exec(line)) !== null) {
+                        timeResult.push({
+                            content: $('<a />').html(line.replace(timeRegResult[0], '')).text(),
+                            seconds: parseInt(timeRegResult[1], 10) * 60 * 1000 // min
+                                +
+                                parseInt(timeRegResult[2], 10) * 1000 // sec
+                                +
+                                (timeRegResult[3] !== null ? parseInt(rightPadding(timeRegResult[3], 3, '0'), 10) : 0), // microsec
+                        });
+                    }
+                });
 
                 // sort time line
                 timeResult.sort((a, b) => {
@@ -1220,17 +1240,17 @@ const main = () => {
         },
     ]);
 
-  app.controller('InstantSearchController', ['$scope', '$http', '$timeout', '$rootScope', 'angularPlayer', 'loWeb',
-    ($scope, $http, $timeout, $rootScope, angularPlayer, loWeb) => {
-      // notice: douban is skipped so array should plus 1
-      $scope.originpagelog = Array(getAllProviders().length+1).fill(1);  // [网易,虾米,QQ,NULL,酷狗,酷我,bilibili, migu]
-      $scope.tab = 0;
-      $scope.keywords = '';
-      $scope.loading = false;
-      $scope.curpagelog = $scope.originpagelog.slice(0);
-      $scope.totalpagelog = $scope.originpagelog.slice(0);
-      $scope.curpage = 1;
-      $scope.totalpage = 1;
+    app.controller('InstantSearchController', ['$scope', '$http', '$timeout', '$rootScope', 'angularPlayer', 'loWeb',
+        ($scope, $http, $timeout, $rootScope, angularPlayer, loWeb) => {
+            // notice: douban is skipped so array should plus 1
+            $scope.originpagelog = Array(getAllProviders().length + 1).fill(1); // [网易,虾米,QQ,NULL,酷狗,酷我,bilibili, migu]
+            $scope.tab = 0;
+            $scope.keywords = '';
+            $scope.loading = false;
+            $scope.curpagelog = $scope.originpagelog.slice(0);
+            $scope.totalpagelog = $scope.originpagelog.slice(0);
+            $scope.curpage = 1;
+            $scope.totalpage = 1;
 
             function updateCurrentPage(cp) {
                 if (cp === -1) { // when search words changes,pagenums should be reset.
@@ -1422,6 +1442,7 @@ const main = () => {
             },
         }),
     ]);
+
 
     app.directive('infiniteScroll', ['$window', '$rootScope',
         ($window, $rootScope) => ({
