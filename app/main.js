@@ -141,7 +141,7 @@ function createWindow() {
     const ewc = require("ewc");
     ewc.setAcrylic(mainWindow, 0x00FFFFFF);
     // 打开开发者工具
-    mainWindow.webContents.openDevTools({ mode: "detach" });
+    // mainWindow.webContents.openDevTools({ mode: "detach" });
     mainWindow.on("close", e => {
         if (willQuitApp) {
             /* the user tried to quit the app */
