@@ -314,8 +314,19 @@
                               <button class="btn btn-primary confirm-button" ng-show="github.getStatus() == 2" ng-click="github.logout();">{{_CANCEL_CONNECT}}</button>
                             </div>
                           </div>
-
-                          <div class="settings-title"><span>{{_SHORTCUTS}}<span></div>
+<div class="settings-title"><span>{{_LYRIC_DISPLAY}}</span></div>
+                                            <div class="settings-content">
+                                                <div class="shortcut" ng-if="!isChrome" class="btn btn-primary confirm-button">
+                                                    <svg class="feather" ng-show="!enableLyricFloatingWindow" ng-click="openLyricFloatingWindow(true)">
+            <use xlink:href="images/feather-sprite.svg#square"></use>
+        </svg>
+                                                    <svg class="feather" ng-show="enableLyricFloatingWindow" ng-click="openLyricFloatingWindow(true)">
+            <use xlink:href="images/feather-sprite.svg#check-square"></use>
+        </svg>
+                                                    <span ng-show="enableLyricFloatingWindow"></span>{{_SHOW_DESKTOP_LYRIC}}
+                                                </div>
+                                            </div>
+                                            <div class="settings-title"><span>{{_SHORTCUTS}}<span></div>
                           <div class="settings-content">
                             <button class="btn btn-primary confirm-button" ng-click="showShortcuts()">{{_VIEW_SHORTCUTS_LIST}}</button>
                               <div class="shortcut" ng-if="!isChrome" class="btn btn-primary confirm-button" >

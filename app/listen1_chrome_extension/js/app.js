@@ -212,13 +212,13 @@ const main = () => {
                 document.getElementsByClassName('browser')[0].scrollTop = 0;
             };
 
-            $scope.showWindow = (url) => {
-                if ($scope.window_url_stack.length > 0 &&
-                    $scope.window_url_stack[$scope.window_url_stack.length - 1] === url) {
-                    return;
-                }
-                $scope.is_window_hidden = 0;
-                $scope.resetWindow();
+      $scope.showWindow = (url) => {
+        if ($scope.window_url_stack.length > 0
+          && $scope.window_url_stack[$scope.window_url_stack.length - 1] === url) {
+          return;
+        }
+        $scope.is_window_hidden = 0;
+        $scope.resetWindow();
 
                 if ($scope.window_url_stack.length > 0 && $scope.window_url_stack[$scope.window_url_stack.length - 1] === '/now_playing') {
                     // if now playing is top, pop it
@@ -283,13 +283,13 @@ const main = () => {
                 }
             };
 
-            $scope.toggleWindow = (url) => {
-                if ($scope.window_url_stack.length > 0 &&
-                    $scope.window_url_stack[$scope.window_url_stack.length - 1] === url) {
-                    return $scope.popWindow();
-                }
-                return $scope.showWindow(url);
-            };
+      $scope.toggleWindow = (url) => {
+        if ($scope.window_url_stack.length > 0
+          && $scope.window_url_stack[$scope.window_url_stack.length - 1] === url) {
+          return $scope.popWindow();
+        }
+        return $scope.showWindow(url);
+      };
 
             $scope.forwardWindow = () => {
                 if ($scope.window_poped_url_stack.length === 0) {
@@ -842,7 +842,9 @@ const main = () => {
                     }, 0);
                 }
                 $scope.enableGlobalShortCut = localStorage.getObject('enable_global_shortcut');
+                $scope.enableLyricFloatingWindow = localStorage.getObject('enable_lyric_floating_window');
                 $scope.applyGlobalShortcut();
+                $scope.openLyricFloatingWindow();
             };
 
             $scope.saveLocalSettings = () => {
@@ -1023,19 +1025,17 @@ const main = () => {
 
                     const timeReg = /\[(\d{2,})\:(\d{2})(?:\.(\d{1,3}))?\]/g; // eslint-disable-line no-useless-escape
 
-                    let timeRegResult = null;
-                    // eslint-disable-next-line no-cond-assign
-                    while ((timeRegResult = timeReg.exec(line)) !== null) {
-                        timeResult.push({
-                            content: $('<a />').html(line.replace(timeRegResult[0], '')).text(),
-                            seconds: parseInt(timeRegResult[1], 10) * 60 * 1000 // min
-                                +
-                                parseInt(timeRegResult[2], 10) * 1000 // sec
-                                +
-                                (timeRegResult[3] !== null ? parseInt(rightPadding(timeRegResult[3], 3, '0'), 10) : 0), // microsec
-                        });
-                    }
-                });
+          let timeRegResult = null;
+          // eslint-disable-next-line no-cond-assign
+          while ((timeRegResult = timeReg.exec(line)) !== null) {
+            timeResult.push({
+              content: $('<a />').html(line.replace(timeRegResult[0], '')).text(),
+              seconds: parseInt(timeRegResult[1], 10) * 60 * 1000 // min
+                + parseInt(timeRegResult[2], 10) * 1000 // sec
+                + (timeRegResult[3] !== null ? parseInt(rightPadding(timeRegResult[3], 3, '0'), 10) : 0), // microsec
+            });
+          }
+        });
 
                 // sort time line
                 timeResult.sort((a, b) => {
@@ -1081,40 +1081,48 @@ const main = () => {
                     lastfm.sendNowPlaying(track.title, track.artist, () => {});
                 }
 
-                if (track.lyric_url !== null) {
-                    url = `${url}&lyric_url=${track.lyric_url}`;
-                }
-                loWeb.get(url).success((res) => {
-                    const { lyric } = res;
-                    if (lyric === null) {
-                        return;
-                    }
-                    $scope.lyricArray = parseLyric(lyric);
-                });
-                $scope.lastTrackId = data;
-            });
+        if (track.lyric_url !== null) {
+          url = `${url}&lyric_url=${track.lyric_url}`;
+        }
+        loWeb.get(url).success((res) => {
+          const { lyric } = res;
+          if (lyric === null) {
+            return;
+          }
+          $scope.lyricArray = parseLyric(lyric);
+        });
+        $scope.lastTrackId = data;
+        if (typeof chrome == 'undefined') {
+          const { ipcRenderer } = require('electron');
+          ipcRenderer.send('currentLyric', track.title);
+        }
+      });
 
-            $scope.$on('currentTrack:position', (event, data) => {
-                // update lyric position
-                const currentSeconds = data;
-                let lastObject = null;
-                $scope.lyricArray.forEach((lyric) => {
-                    if (currentSeconds >= lyric.seconds) {
-                        lastObject = lyric;
-                    }
-                });
-                if (lastObject && lastObject.lineNumber !== $scope.lyricLineNumber) {
-                    const lineHeight = 21;
-                    const lineElement = $('.lyric p')[lastObject.lineNumber];
-                    const windowHeight = 380;
-                    const AdditionOffset = -158;
-                    const offset = lineElement.offsetTop - windowHeight / 2 + AdditionOffset;
-                    $('.lyric').animate({
-                        scrollTop: `${offset}px`,
-                    }, 500);
-                    $scope.lyricLineNumber = lastObject.lineNumber;
-                }
-            });
+      $scope.$on('currentTrack:position', (event, data) => {
+        // update lyric position
+        const currentSeconds = data;
+        let lastObject = null;
+        $scope.lyricArray.forEach((lyric) => {
+          if (currentSeconds >= lyric.seconds) {
+            lastObject = lyric;
+          }
+        });
+        if (lastObject && lastObject.lineNumber !== $scope.lyricLineNumber) {
+          const lineHeight = 21;
+          const lineElement = $('.lyric p')[lastObject.lineNumber];
+          const windowHeight = 380;
+          const AdditionOffset = -158;
+          const offset = lineElement.offsetTop - windowHeight / 2 + AdditionOffset;
+          $('.lyric').animate({
+            scrollTop: `${offset}px`,
+          }, 500);
+          $scope.lyricLineNumber = lastObject.lineNumber;
+          if (typeof chrome == 'undefined') {
+            const { ipcRenderer } = require('electron');
+            ipcRenderer.send('currentLyric', $scope.lyricArray[lastObject.lineNumber].content);
+          }
+        }
+      });
 
             // define keybind
             hotkeys.add({
@@ -1224,6 +1232,23 @@ const main = () => {
                 // check if globalShortcuts is allowed
                 localStorage.setObject('enable_global_shortcut', $scope.enableGlobalShortCut);
 
+                const { ipcRenderer } = require('electron');
+                ipcRenderer.send('control', message);
+            };
+            $scope.openLyricFloatingWindow = (toggle) => {
+                if (typeof chrome !== 'undefined') {
+                    return;
+                }
+                let message = '';
+                if (toggle === true) {
+                    $scope.enableLyricFloatingWindow = !$scope.enableLyricFloatingWindow;
+                }
+                if ($scope.enableLyricFloatingWindow === true) {
+                    message = 'enable_lyric_floating_window';
+                } else {
+                    message = 'disable_lyric_floating_window';
+                }
+                localStorage.setObject('enable_lyric_floating_window', $scope.enableLyricFloatingWindow);
                 const { ipcRenderer } = require('electron');
                 ipcRenderer.send('control', message);
             };
