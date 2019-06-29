@@ -19,7 +19,7 @@ Listen 1 可以搜索和播放来自网易云音乐、虾米音乐、QQ 音乐�
   
 当前更新 (2019-6-29) [ [2.3.1.1](https://github.com/reycn/listen1_desktop_fluent/releases/tag/2.3.1.1) ]：
 ----
-- 同步原版桌面版全局快捷键、[桌面歌词](https://github.com/listen1/listen1_chrome_extension/commit/8f1acfd514270631f776df96197f0b253f3ae755)
+- 同步原版桌面版全局快捷键、桌面歌词 (By [listen1](https://github.com/listen1/listen1_chrome_extension/commit/8f1acfd514270631f776df96197f0b253f3ae755), [Baiyuan Wang](https://github.com/listen1/listen1_chrome_extension/pull/245) )
 - Acrylic 毛玻璃桌面歌词
 - 添加全局快捷键 `Ctrl` + `Alt` + `Space` 切换 `播放/暂停`
 - 修复[音量按钮位置问题](https://github.com/reycn/listen1_desktop_fluent/issues/10)
