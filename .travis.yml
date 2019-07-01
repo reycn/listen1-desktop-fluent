@@ -3,8 +3,7 @@ language: node_js
 node_js:
   - "8"
 before_install:
-  - npm postinstall
-  - npm i -g electron
+  - npm i -g electron@4.0.6 electron-builder@20.39.0
 cache: npm
 script:
     - npm run dist:win64
