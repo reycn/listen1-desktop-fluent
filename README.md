@@ -16,8 +16,11 @@ Listen 1 可以搜索和播放来自网易云音乐、虾米音乐、QQ 音乐�
 - 部分 UI / UX 优化
 - 添加播放/暂停快捷键
 
-
 ## 最近更新
+
+[2.4.0](https://github.com/reycn/listen1_desktop_fluent/releases/tag/2.4.0) (2019-6-29)
+
+- 修复咪咕音乐接口 [[同步]](https://github.com/listen1/listen1_chrome_extension)
 
 [2.3.1.1](https://github.com/reycn/listen1_desktop_fluent/releases/tag/2.3.1.1) (2019-6-29)
 
