@@ -269,7 +269,8 @@
     }
     
     .navigation .settings {
-        flex: 0 0 32px;
+        /* flex: 0 0 32px; */
+        flex: 0 0 0px;
     }
     
     .navigation .icon {
@@ -304,7 +305,7 @@
     .navigation .window-control {
         flex: 0 0 105px;
         border-left: solid 1px var(--window-control-border-color);
-        margin-left: 15px;
+        /* margin-left: 15px; */
     }
     
     .navigation .window-control svg {
