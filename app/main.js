@@ -140,7 +140,7 @@ function createWindow() {
         webPreferences: { 'nodeIntegration': true },
         icon: iconPath,
         titleBarStyle: 'hiddenInset',
-        transparent: transparent,
+        transparent: true,
         frame: false,
         thickFrame: true, // if transparent, thickFrame == false
         hasShadow: true

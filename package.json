@@ -79,6 +79,7 @@
         "electron-builder": "^20.39.0"
     },
     "dependencies": {
-        "electron-debug": "^1.5.0"
+        "electron-debug": "^1.5.0",
+        "ewc": "0.0.1"
     }
 }
