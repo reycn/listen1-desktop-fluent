@@ -9,18 +9,18 @@
 Listen 1 可以搜索和播放来自网易云音乐、虾米音乐、QQ 音乐、酷狗音乐、酷我音乐、哔哩哔哩音乐六大主流音乐平台歌曲，让你的曲库更全面。并支持收藏功能，方便的创建自己的歌单。
 
 ![浅色主题](https://i.imgur.com/mPRtRJo.png)
-  
+
 本版特色
 
 ---
 
-- Fluent Acrylic 窗口
+- Fluent Acrylic 窗口（由于 Windows 1903 BUG 暂时由 Blur 替换）
 - 部分 UI / UX 优化
-- 添加播放/暂停快捷键
+- 添加播放/暂停全局快捷键
 
 ## 最近更新
 
-[2.5.2](https://github.com/reycn/listen1_desktop_fluent/releases/tag/2.5.2) (2019-6-29)
+[2.5.2](https://github.com/reycn/listen1_desktop_fluent/releases/tag/2.5.2) (2020.2.26)
 
 - 同步自 2.4.1 以来[上游代码所有更新](https://github.com/listen1/listen1_chrome_extension/releases) - Issue @ [及时跟进更新啊](https://github.com/reycn/listen1_desktop_fluent/issues/17)；
 - 增加深色主题切换 [上游](https://github.com/listen1/listen1_chrome_extension/releases/tag/v2.5.0) ；
