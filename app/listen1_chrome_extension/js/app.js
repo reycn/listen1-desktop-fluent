@@ -114,64 +114,62 @@ const main = () => {
     }
 
 
-    app.controller('TranslateController', ['$scope', '$translate', '$http', ($scope, $translate, $http) => {
-        let defaultLang = 'zh_CN';
-        const supportLangs = ['zh_CN', 'en_US'];
-        if (supportLangs.indexOf(navigator.language) !== -1) {
-            defaultLang = navigator.language;
-        }
-        if (supportLangs.indexOf(localStorage.getObject('language')) !== -1) {
-            defaultLang = localStorage.getObject('language');
-        }
+  app.controller('ProfileController', ['$scope', '$translate', '$http', ($scope, $translate, $http) => {
+    let defaultLang = 'zh_CN';
+    const supportLangs = ['zh_CN', 'en_US'];
+    if (supportLangs.indexOf(navigator.language) !== -1) {
+      defaultLang = navigator.language;
+    }
+    if (supportLangs.indexOf(localStorage.getObject('language')) !== -1) {
+      defaultLang = localStorage.getObject('language');
+    }
 
-        $scope.setLang = (langKey) => {
-            // You can change the language during runtime
-            $translate.use(langKey).then(() => {
-                $http.get('./i18n/zh_CN.json')
-                    .then((res) => {
-                        Object.keys(res.data).forEach((key) => {
-                            $scope[key] = $translate.instant(key);
-                        });
-                    });
-                localStorage.setObject('language', langKey);
+    $scope.setLang = (langKey) => {
+      // You can change the language during runtime
+      $translate.use(langKey).then(() => {
+        $http.get('./i18n/zh_CN.json')
+          .then((res) => {
+            Object.keys(res.data).forEach((key) => {
+              $scope[key] = $translate.instant(key);
             });
-        };
+          });
+        localStorage.setObject('language', langKey);
+      });
+    };
+    $scope.setLang(defaultLang);
 
-        $scope.setLang(defaultLang);
-    }]);
-    app.controller('AcrylicController', ['$scope', '$acrylic', '$window', ($scope, $acrylic, $window) => {
-        let defaultAcry = true;
-        const supportAcry = [true, false];
+    let defaultTheme = 'white';
+    if (localStorage.getObject('theme') !== null) {
+      defaultTheme = localStorage.getObject('theme');
+    }
+    $scope.setTheme = (theme) => {
+      var themeFiles = {
+        'white':"css/iparanoid.css",
+        'black': "css/origin.css"
+      }
+      // You can change the language during runtime
+      if(themeFiles[theme]!==undefined) {
+        document.getElementById('theme').href = themeFiles[theme];
+        localStorage.setObject('theme', theme);
+      }      
+    };
+    $scope.setTheme(defaultTheme);
+  }]);
 
-        const ewc = require("ewc");
-
-
-        $scope.setAcry = () => {
-            // You can change the language during runtime
-
-            const ewc = require("ewc");
-            ewc.setAcrylic($window, 0xFFFFFFFF);
-            localStorage.setObject('acrylic', acryKey);
-
-
-        };
-
-        $scope.setAcry();
-    }]);
-    // control main view of page, it can be called any place
-    app.controller('NavigationController', ['$scope', '$http',
-        '$httpParamSerializerJQLike', '$timeout',
-        'angularPlayer', 'Notification', '$rootScope', 'loWeb',
-        'hotkeys', 'lastfm', 'github', 'gist', '$translate',
-        ($scope, $http, $httpParamSerializerJQLike,
-            $timeout, angularPlayer, Notification, $rootScope,
-            loWeb, hotkeys, lastfm, github, gist, $translate) => {
-            $rootScope.page_title = 'Listen 1'; // eslint-disable-line no-param-reassign
-            $scope.window_url_stack = [];
-            $scope.window_poped_url_stack = [];
-            $scope.current_tag = 2;
-            $scope.is_window_hidden = 1;
-            $scope.is_dialog_hidden = 1;
+  // control main view of page, it can be called any place
+  app.controller('NavigationController', ['$scope', '$http',
+    '$httpParamSerializerJQLike', '$timeout',
+    'angularPlayer', 'Notification', '$rootScope', 'loWeb',
+    'hotkeys', 'lastfm', 'github', 'gist', '$translate',
+    ($scope, $http, $httpParamSerializerJQLike,
+      $timeout, angularPlayer, Notification, $rootScope,
+      loWeb, hotkeys, lastfm, github, gist, $translate) => {
+      $rootScope.page_title = 'Listen 1'; // eslint-disable-line no-param-reassign
+      $scope.window_url_stack = [];
+      $scope.window_poped_url_stack = [];
+      $scope.current_tag = 2;
+      $scope.is_window_hidden = 1;
+      $scope.is_dialog_hidden = 1;
 
             $scope.songs = [];
             $scope.current_list_id = -1;

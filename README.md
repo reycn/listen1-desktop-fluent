@@ -8,19 +8,30 @@
 
 Listen 1 可以搜索和播放来自网易云音乐、虾米音乐、QQ 音乐、酷狗音乐、酷我音乐、哔哩哔哩音乐六大主流音乐平台歌曲，让你的曲库更全面。并支持收藏功能，方便的创建自己的歌单。
 
-<img src="https://i.imgur.com/BWC3SHB.png">  
-    
+![浅色主题](https://i.imgur.com/mPRtRJo.png)
+  
 本版特色
----- 
+
+---
+
 - Fluent Acrylic 窗口
 - 部分 UI / UX 优化
 - 添加播放/暂停快捷键
 
 ## 最近更新
 
-[2.4.0](https://github.com/reycn/listen1_desktop_fluent/releases/tag/2.4.0) (2019-6-29)
+[2.5.2](https://github.com/reycn/listen1_desktop_fluent/releases/tag/2.5.2) (2019-6-29)
 
-- 修复咪咕音乐接口 [[同步]](https://github.com/listen1/listen1_chrome_extension)
+- 同步自 2.4.1 以来[上游代码所有更新](https://github.com/listen1/listen1_chrome_extension/releases) - Issue @ [及时跟进更新啊](https://github.com/reycn/listen1_desktop_fluent/issues/17)；
+- 增加深色主题切换 [上游](https://github.com/listen1/listen1_chrome_extension/releases/tag/v2.5.0) ；
+- 增加法语支持 thanks to @Leoche [上游](https://github.com/listen1/listen1_chrome_extension/releases/tag/v2.5.2)；
+- 修复咪咕音乐播放问题 [上游](https://github.com/listen1/listen1_chrome_extension/releases/tag/v2.5.1) ；
+- 修复音量图标异常 - Issue @ [音量合成器处图标异常](https://github.com/reycn/listen1_desktop_fluent/issues/18)；
+- 修复 1903 系统 BUG 导致的窗口拖动延迟（通过 Blur 替换 Acrylic 暂时修复） - Issue @ [win10 1903 拖动 listen1 窗口卡顿，延时严重](https://github.com/reycn/listen1_desktop_fluent/issues/15)；
+- 为适配 Blur 和深色主题，界面样式有细微修改。
+
+![浅色主题](https://i.imgur.com/mPRtRJo.png)
+![深色主题](https://i.imgur.com/t6SsQJ0.png)
 
 [2.3.1.1](https://github.com/reycn/listen1_desktop_fluent/releases/tag/2.3.1.1) (2019-6-29)
 
@@ -37,23 +48,6 @@ Listen 1 可以搜索和播放来自网易云音乐、虾米音乐、QQ 音乐�
 - 修复网易云音乐播放问题
 - 修复 Githb 接口
 
-[2.2.0](https://github.com/reycn/listen1_desktop_fluent/releases/tag/2.2.0)
-
-- 引入 [EWC](https://github.com/23phy/ewc) 模块，真正实现 [Fluent](https://www.microsoft.com/design/fluent/#/) 窗口 ([Issue#11](https://github.com/reycn/listen1_desktop_fluent/issues/11)Fixed)
-- 同步原版改动（修复酷狗、虾米播放问题）
-- 添加动画（很优雅哈哈）、优化 CSS 代码
-
-[2.1.6](https://github.com/reycn/listen1_desktop_fluent/releases/tag/2.1.6)
-
-- 同步原版改动
-- 修复虾米音乐播放问题
-
 [更多 >>>](https://github.com/reycn/listen1_desktop_fluent/commits/master)
-
-## 更多图片
-
-<img src="https://i.imgur.com/HQEpd8W.png">
-<img src="https://i.imgur.com/dB3STeS.png">
-<img src="https://i.imgur.com/4FJGvUx.gif">
 
 本版本适用 Windows，其他请使用 [原桌面版](https://github.com/listen1/listen1_desktop/) 或 [Chrome 插件](https://github.com/listen1/listen1_chrome_extension)。
