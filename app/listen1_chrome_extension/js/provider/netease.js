@@ -122,33 +122,30 @@ function build_netease() {
     const domain = 'https://music.163.com';
     const nuidName = '_ntes_nuid';
     const nnidName = '_ntes_nnid';
-    let cookieProvider = null;
     let env = null;
     if (typeof chrome !== 'undefined') {
-      cookieProvider = chrome;
       env = 'chrome';
     } else {
       const remote = require('electron').remote; // eslint-disable-line
-      cookieProvider = remote.session.defaultSession;
       env = 'electron';
     }
-    cookieProvider.cookies.get({
+    cookieGet({
       url: domain,
       name: nuidName,
     }, (arg1, arg2) => {
-      if (((env === 'chrome') && (arg1 == null)) || ((env === 'electron' && arg2.length === 0))) {
+      if (((env === 'chrome') && (arg1 == null)) || ((env === 'electron' && arg2.length == 0))) {
         const nuidValue = _create_secret_key(32);
         const nnidValue = `${nuidValue},${(new Date()).getTime()}`;
         // netease default cookie expire time: 100 years
         const expire = ((new Date()).getTime() + 1e3 * 60 * 60 * 24 * 365 * 100) / 1000;
 
-        cookieProvider.cookies.set({
+        cookieSet({
           url: domain,
           name: nuidName,
           value: nuidValue,
           expirationDate: expire,
         }, (cookie) => { // eslint-disable-line no-unused-vars
-          cookieProvider.cookies.set({
+          cookieSet({
             url: domain,
             name: nnidName,
             value: nnidValue,
@@ -161,6 +158,91 @@ function build_netease() {
         callback(null);
       }
     });
+  }
+
+  function async_process_list(data_list, handler, handler_extra_param_list, callback) {
+    const fnDict = {};
+    data_list.forEach((item, index) => {
+      fnDict[index] = cb => handler(index, item, handler_extra_param_list, cb);
+    });
+    async.parallel(fnDict,
+      (err, results) => callback(null, data_list.map((item, index) => results[index])));
+  }
+
+  function ng_render_playlist_result_item(index, item, params, callback) {
+    const hm = params[0];
+    const se = params[1];
+    const target_url = 'https://music.163.com/weapi/v3/song/detail';
+    const queryIds = [item.id];
+    const d = {
+      c: '[' + queryIds.map(id => ('{"id":' + id + '}')).join(',') + ']',
+      ids: '[' + queryIds.join(',') + ']'
+    }
+    const data = _encrypted_request(d);
+    hm({
+      url: target_url,
+      method: 'POST',
+      data: se(data),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    }).then((response)=>{
+      track_json = response.data.songs[0];
+      const track = {
+        id: `netrack_${track_json.id}`,
+        title: track_json.name,
+        artist: track_json.ar[0].name,
+        artist_id: `neartist_${track_json.ar[0].id}`,
+        album: track_json.al.name,
+        album_id: `nealbum_${track_json.al.id}`,
+        source: 'netease',
+        source_url: `http://music.163.com/#/song?id=${track_json.id}`,
+        img_url: track_json.al.picUrl,
+        url: `netrack_${track_json.id}`,
+      };
+      return callback(null, track);
+    });
+  }
+
+  function ng_parse_playlist_tracks(playlist_tracks, hm, se, callback) {
+    const target_url = 'https://music.163.com/weapi/v3/song/detail';
+    const track_ids = playlist_tracks.map(i=>i.id);
+    const d = {
+      c: '[' + track_ids.map(id => ('{"id":' + id + '}')).join(',') + ']',
+      ids: '[' + track_ids.join(',') + ']'
+    }
+    const data = _encrypted_request(d);
+    hm({
+      url: target_url,
+      method: 'POST',
+      data: se(data),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    }).then((response)=>{
+      const tracks = response.data.songs.map(track_json=>({
+        id: `netrack_${track_json.id}`,
+        title: track_json.name,
+        artist: track_json.ar[0].name,
+        artist_id: `neartist_${track_json.ar[0].id}`,
+        album: track_json.al.name,
+        album_id: `nealbum_${track_json.al.id}`,
+        source: 'netease',
+        source_url: `http://music.163.com/#/song?id=${track_json.id}`,
+        img_url: track_json.al.picUrl,
+        url: `netrack_${track_json.id}`,
+      }));
+
+      return callback(null, tracks);
+    });
+  }
+  function split_array(myarray, size) {
+    var count = Math.ceil(myarray.length / size);
+    var result = [];
+    for (var i = 0; i < count; i++) {
+      result.push(myarray.slice(i * size, (i + 1) * size));
+    }
+    return result;
   }
 
   function ne_get_playlist(url, hm, se) {
@@ -195,22 +277,24 @@ function build_netease() {
               title: res_data.playlist.name,
               source_url: `http://music.163.com/#/playlist?id=${list_id}`,
             };
-            const tracks = res_data.playlist.tracks.map(track_json => ({
-              id: `netrack_${track_json.id}`,
-              title: track_json.name,
-              artist: track_json.ar[0].name,
-              artist_id: `neartist_${track_json.ar[0].id}`,
-              album: track_json.al.name,
-              album_id: `nealbum_${track_json.al.id}`,
-              source: 'netease',
-              source_url: `http://music.163.com/#/song?id=${track_json.id}`,
-              img_url: track_json.al.picUrl,
-              url: `netrack_${track_json.id}`,
-            }));
-            return fn({
-              info,
-              tracks,
+            var max_allow_size = 1000;
+            var trackIdsArray = split_array(res_data.playlist.trackIds, max_allow_size);
+
+            function ng_parse_playlist_tracks_wrapper(trackIds, callback){
+              return ng_parse_playlist_tracks(trackIds, hm, se, callback);
+            }
+
+            async.concat(trackIdsArray, ng_parse_playlist_tracks_wrapper, function(err, tracks){
+              fn({tracks, info});
             });
+
+            // request every tracks to fetch song info
+            // async_process_list(res_data.playlist.trackIds, ng_render_playlist_result_item, [hm, se],
+            //   (err, tracks) => fn({
+            //     tracks,
+            //     info,
+            //   }));
+
           });
         });
       },
@@ -261,11 +345,16 @@ function build_netease() {
     const target_url = 'http://music.163.com/api/search/pc';
     const keyword = getParameterByName('keywords', url);
     const curpage = getParameterByName('curpage', url);
+    const searchType = getParameterByName('type', url);
+    var ne_search_type = '1';
+    if(searchType === '1'){
+      ne_search_type = '1000'
+    }
     const req_data = {
       s: keyword,
       offset: 20 * (curpage - 1),
       limit: 20,
-      type: 1,
+      type: ne_search_type,
     };
     return {
       success(fn) {
@@ -278,22 +367,42 @@ function build_netease() {
           },
         }).then((response) => {
           const { data } = response;
-          const tracks = data.result.songs.map(song_info => ({
-            id: `netrack_${song_info.id}`,
-            title: song_info.name,
-            artist: song_info.artists[0].name,
-            artist_id: `neartist_${song_info.artists[0].id}`,
-            album: song_info.album.name,
-            album_id: `nealbum_${song_info.album.id}`,
-            source: 'netease',
-            source_url: `http://music.163.com/#/song?id=${song_info.id}`,
-            img_url: song_info.album.picUrl,
-            url: `netrack_${song_info.id}`,
-            disabled: !is_playable(song_info),
-          }));
+          var result = [];
+          var total = 0;
+          if(searchType === '0') {
+            result = data.result.songs.map(song_info => ({
+              id: `netrack_${song_info.id}`,
+              title: song_info.name,
+              artist: song_info.artists[0].name,
+              artist_id: `neartist_${song_info.artists[0].id}`,
+              album: song_info.album.name,
+              album_id: `nealbum_${song_info.album.id}`,
+              source: 'netease',
+              source_url: `http://music.163.com/#/song?id=${song_info.id}`,
+              img_url: song_info.album.picUrl,
+              url: `netrack_${song_info.id}`,
+              disabled: !is_playable(song_info),
+            }));
+            total = data.result.songCount;
+          }
+          else if (searchType === '1'){
+            result = data.result.playlists.map(info => ({
+              id: `neplaylist_${info.id}`,
+              title: info.name,
+              source: 'netease',
+              source_url: `https://music.163.com/#/playlist?id=${info.id}`,
+              img_url: info.coverImgUrl,
+              url: `neplaylist_${info.id}`,
+              author: info.creator.nickname,
+              count: info.trackCount
+            }));
+            total = data.result.playlistCount;
+          }
+
           return fn({
-            result: tracks,
-            total: data.result.songCount,
+            result: result,
+            total: total,
+            type: searchType
           });
         });
       },
@@ -407,11 +516,17 @@ function build_netease() {
         }).then((response) => {
           const { data: res_data } = response;
           let lrc = '';
+          let tlrc = '';
           if (res_data.lrc != null) {
             lrc = res_data.lrc.lyric;
           }
+          if (res_data.tlyric != null && res_data.tlyric.lyric != null) {
+            tlrc = res_data.tlyric.lyric.replace(/(|\\)/g, '');
+            tlrc = tlrc.replace(/[\u2005]+/g, ' ');
+          }
           return fn({
             lyric: lrc,
+            tlyric: tlrc
           });
         });
       },
@@ -420,11 +535,31 @@ function build_netease() {
 
   function ne_parse_url(url) {
     let result;
-    url = url.replace('music.163.com/#/my/m/music/playlist?', 'music.163.com/#/playlist?'); // eslint-disable-line no-param-reassign
-    if (url.search('//music.163.com/#/m/playlist') !== -1 || url.search('//music.163.com/#/playlist') !== -1 || url.search('//music.163.com/playlist') !== -1) {
+    let id = '';
+    url = url.replace('music.163.com/#/discover/toplist?', 'music.163.com/#/playlist?'); // eslint-disable-line no-param-reassign
+    url = url.replace('music.163.com/#/my/m/music/', 'music.163.com/'); // eslint-disable-line no-param-reassign
+    url = url.replace('music.163.com/#/m/', 'music.163.com/'); // eslint-disable-line no-param-reassign
+    url = url.replace('music.163.com/#/', 'music.163.com/'); // eslint-disable-line no-param-reassign
+    if (url.search('//music.163.com/playlist') !== -1 ) {
+      let match = /\/\/music.163.com\/playlist\/([0-9]+)/.exec(url);
+      id = match ? match[1] : getParameterByName('id', url);
       result = {
         type: 'playlist',
-        id: `neplaylist_${getParameterByName('id', url)}`,
+        id: `neplaylist_${id}`,
+      };
+    }
+    else if (url.search('//music.163.com/artist') !== -1) {
+      result = {
+        type: 'playlist',
+        id: `neartist_${getParameterByName('id', url)}`,
+      };
+    }
+    else if (url.search('//music.163.com/album') !== -1) {
+      let match = /\/\/music.163.com\/album\/([0-9]+)/.exec(url);
+      id = match ? match[1] : getParameterByName('id', url);
+      result = {
+        type: 'playlist',
+        id: `nealbum_${id}`,
       };
     }
     return result;

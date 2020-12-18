@@ -18,6 +18,8 @@ function getProviderByName(sourceName) {
       return bilibili;
     case 'migu':
       return migu;
+    case 'localmusic':
+      return localmusic;
     default:
       return null;
   }
@@ -44,6 +46,8 @@ function getProviderByItemId(itemId) {
       return bilibili;
     case 'mg':
       return migu;
+    case 'lm':
+      return localmusic;
     case 'my':
       return myplaylist;
     default:
@@ -54,53 +58,69 @@ function getProviderByItemId(itemId) {
 ngloWebManager.factory('loWeb', ['$rootScope', '$log', '$http', '$httpParamSerializerJQLike',
   ($rootScope, $log, $http, $httpParamSerializerJQLike) => ({
     get(url) {
-      if (url.search('/show_playlist') !== -1) {
+      const path = url.split('?')[0];
+      if (path === '/show_playlist') {
         const source = getParameterByName('source', url);
         const provider = getProviderByName(source);
         return provider.show_playlist(url, $http);
       }
-      if (url.search('/playlist') !== -1) {
+      if (path === '/playlist') {
         const list_id = getParameterByName('list_id', url);
         const provider = getProviderByItemId(list_id);
         return provider.get_playlist(url, $http, $httpParamSerializerJQLike);
       }
-      if (url.search('/search') !== -1) {
+      if (path === '/search') {
         const source = getParameterByName('source', url);
         const provider = getProviderByName(source);
         return provider.search(url, $http, $httpParamSerializerJQLike);
       }
-      if (url.search('/lyric') !== -1) {
+      if (path === '/lyric') {
         const track_id = getParameterByName('track_id', url);
         const provider = getProviderByItemId(track_id);
         return provider.lyric(url, $http, $httpParamSerializerJQLike);
       }
-      if (url.search('/show_myplaylist') !== -1) {
-        return myplaylist.show_myplaylist();
+      if (path === '/show_myplaylist') {
+        return myplaylist.show_myplaylist('my');
+      }
+      if (path === '/show_favoriteplaylist') {
+        return myplaylist.show_myplaylist('favorite');
+      }
+      
+      if (path === '/playlist_contains') {
+        const list_id = getParameterByName('list_id', url);
+        const playlist_type = getParameterByName('type', url);
+        const result = myplaylist.myplaylist_containers(playlist_type, list_id);
+        return {
+          success: fn => fn({result})
+        };
       }
       return null;
     },
     post(request) {
-      if (request.url.search('/clone_playlist') !== -1) {
+      const path = request.url.split('?')[0];
+      if (path === '/clone_playlist') {
+        const playlist_type = getParameterByName('playlist_type', `${request.url}?${request.data}`);
         const list_id = getParameterByName('list_id', `${request.url}?${request.data}`);
         const provider = getProviderByItemId(list_id);
         const url = `/playlist?list_id=${list_id}`;
         return {
           success: (fn) => {
             provider.get_playlist(url, $http, $httpParamSerializerJQLike).success((data) => {
-              myplaylist.save_myplaylist(data);
+              myplaylist.save_myplaylist(playlist_type, data);
               fn();
             });
           },
         };
       }
-      if (request.url.search('/remove_myplaylist') !== -1) {
+      if (path === '/remove_myplaylist') {
+        const playlist_type = getParameterByName('playlist_type', `${request.url}?${request.data}`);
         const list_id = getParameterByName('list_id', `${request.url}?${request.data}`);
-        myplaylist.remove_myplaylist(list_id);
+        myplaylist.remove_myplaylist(playlist_type, list_id);
         return {
           success: fn => fn(),
         };
       }
-      if (request.url.search('/add_myplaylist') !== -1) {
+      if (path === '/add_myplaylist') {
         const list_id = getParameterByName('list_id', `${request.url}?${request.data}`);
         const track_json = getParameterByName('track', `${request.url}?${request.data}`);
         const track = JSON.parse(track_json);
@@ -109,7 +129,14 @@ ngloWebManager.factory('loWeb', ['$rootScope', '$log', '$http', '$httpParamSeria
           success: fn => fn(),
         };
       }
-      if (request.url.search('/remove_track_from_myplaylist') !== -1) {
+      if (path === '/add_playlist') {
+        const list_id = getParameterByName('list_id', `${request.url}?${request.data}`);
+        const provider = getProviderByItemId(list_id);
+        const tracks_json = getParameterByName('tracks', `${request.url}?${request.data}`);
+        const tracks = JSON.parse(tracks_json);
+        return provider.add_playlist(list_id, tracks);
+      }
+      if (path === '/remove_track_from_myplaylist') {
         const list_id = getParameterByName('list_id', `${request.url}?${request.data}`);
         const track_id = getParameterByName('track_id', `${request.url}?${request.data}`);
         myplaylist.remove_from_myplaylist(list_id, track_id);
@@ -117,7 +144,13 @@ ngloWebManager.factory('loWeb', ['$rootScope', '$log', '$http', '$httpParamSeria
           success: fn => fn(),
         };
       }
-      if (request.url.search('/create_myplaylist') !== -1) {
+      if (path === '/remove_track_from_playlist') {
+        const list_id = getParameterByName('list_id', `${request.url}?${request.data}`);
+        const track_id = getParameterByName('track_id', `${request.url}?${request.data}`);
+        const provider = getProviderByItemId(list_id);
+        return provider.remove_from_playlist(list_id, track_id);
+      }
+      if (path === '/create_myplaylist') {
         const list_title = getParameterByName('list_title', `${request.url}?${request.data}`);
         const track_json = getParameterByName('track', `${request.url}?${request.data}`);
         const track = JSON.parse(track_json);
@@ -128,7 +161,7 @@ ngloWebManager.factory('loWeb', ['$rootScope', '$log', '$http', '$httpParamSeria
           },
         };
       }
-      if (request.url.search('/edit_myplaylist') !== -1) {
+      if (path === '/edit_myplaylist') {
         const list_id = getParameterByName('list_id', `${request.url}?${request.data}`);
         const title = getParameterByName('title', `${request.url}?${request.data}`);
         const cover_img_url = getParameterByName('cover_img_url', `${request.url}?${request.data}`);
@@ -137,7 +170,7 @@ ngloWebManager.factory('loWeb', ['$rootScope', '$log', '$http', '$httpParamSeria
           success: fn => fn(),
         };
       }
-      if (request.url.search('/parse_url') !== -1) {
+      if (path === '/parse_url') {
         const url = getParameterByName('url', `${request.url}?${request.data}`);
         const providers = getAllProviders();
         let result = undefined;
@@ -151,7 +184,7 @@ ngloWebManager.factory('loWeb', ['$rootScope', '$log', '$http', '$httpParamSeria
           success: fn => fn({ result }),
         };
       }
-      if (request.url.search('/merge_playlist') !== -1) {
+      if (path === '/merge_playlist') {
         const source = getParameterByName('source', `${request.url}?${request.data}`);
         const target = getParameterByName('target', `${request.url}?${request.data}`);
         const tarData = (localStorage.getObject(target)).tracks;
@@ -167,22 +200,96 @@ ngloWebManager.factory('loWeb', ['$rootScope', '$log', '$http', '$httpParamSeria
       }
       return null;
     },
-    bootstrapTrack(success, failure) {
+    bootstrapTrack(success, failure, getAutoChooseSource) {
+      function getTrackFromSame(track, source, callback){
+        if (track.source === source){
+          // come from same source, no need to check
+          return callback(null);
+        }
+        //TODO: better query method
+        const keyword = track.title + ' ' + track.artist;
+        const curpage = 1;
+        const url = `/search?source=${source}&keywords=${keyword}&curpage=${curpage}`;
+        const provider = getProviderByName(source);
+        provider.search(url, $http, $httpParamSerializerJQLike).success((data)=>{
+          for(var i = 0; i < data.result.length; i++) {
+            const searchTrack = data.result[i];
+            // compare search track and track to check if they are same
+            // TODO: better similar compare method (duration, md5)
+            if (!searchTrack.disable){
+              if ((searchTrack.title === track.title) && (searchTrack.artist === track.artist)){
+                return callback(searchTrack);
+              }
+            }
+          };
+          return callback(null);
+        });
+      }
+
+      function getUrlFromTrack(track, source, callback) {
+        const provider = getProviderByName(source);
+        const soundInfo = {}
+        provider.bootstrap_track(soundInfo, track, () => {
+          callback(soundInfo.url);
+        },
+        ()=>{
+          callback(null);
+        }, $http, $httpParamSerializerJQLike);
+      }
+
+      function getUrlFromSame(track, source, callback){
+        getTrackFromSame(track, source, (sameTrack)=>{
+          if (sameTrack === null) {
+            return callback(null);
+          }
+          return getUrlFromTrack(sameTrack, source, callback);
+        });
+      }
+
       return (sound, track, playerSuccessCallback, playerFailCallback) => {
-        // always refresh url, becaues url will expires
-        // if (sound.url.search('http') !== -1){
-        //     callback();
-        //     return;
-        // }
+
         function successCallback() {
           playerSuccessCallback();
           success();
         }
 
         function failureCallback() {
-          playerFailCallback();
-          failure();
+          if(!getAutoChooseSource()){
+            playerFailCallback();
+            failure();
+            return 
+          }
+          const failover_source_list = ['kuwo', 'qq', 'migu'];
+
+          function makeFn(track, source){
+            return function(cb){
+              getUrlFromSame(track, source, function(url){
+                // pass url as error to return instant when any of source available
+                return cb(url);
+              });
+            }
+          }
+          const getUrlFnList = [];
+          for (var i=0; i<failover_source_list.length; i++){
+            getUrlFnList.push(makeFn(track, failover_source_list[i]));
+          }
+
+          async.parallel(
+            getUrlFnList,
+            function(err) {
+              if(err){
+                // use error to make instant return, error contains url
+                sound.url = err;
+                playerSuccessCallback();
+                success();
+                return;
+              }
+
+              playerFailCallback();
+              failure();
+            });
         }
+
         const { source } = track;
         const provider = getProviderByName(source);
 

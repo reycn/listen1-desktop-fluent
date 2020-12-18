@@ -1,15 +1,28 @@
-Listen 1 (Chrome Extension) V2.5.2
+Listen 1 (Chrome Extension) V2.17.1
 ==========
-（Last Update Sep 7th, 2019)
+（Last Update December 12nd, 2020)
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 
 One for all free music in China
 ----
 When I found many songs are unavailable because copyright issue, I realized there's something I should do.
-Mom never need to worry about I can't listen my favorite songs. Listen 1 includes song libraries from Netease, QQ, Kugou, Kuwo, Bilibili.
+Mom never need to worry about I can't listen my favorite songs. 
+
+Supported music platform:
+
+* Netease
+* QQ
+* Kugou
+* Kuwo
+* Bilibili
+* Migu
 
 Search songs, listen songs from multiple platforms, that's `Listen 1`.
+
+V2.9.0 New Feature: Auto choose source
+
+when music play source url is not available, auto choose source from other sources.
 
 Making your own playlist is also supported.
 
@@ -33,6 +46,68 @@ Install (Firefox)
 
 Changelog
 -------
+`2020-12-12`
+* support search songlist for qq music (thanks @RecluseWind）
+* fix bug: netease songlist shared by mobile open error (thanks @RecluseWind）
+* fix bug: migu search song error
+
+`2020-10-28`
+* add local music (desktop version only)
+
+`2020-10-27`
+* support search playlist (only for netease by now) 
+* optimaze lyric display
+* fix bilibili artist api, fix lyric time tag format parse error (thanks @RecluseWind)
+* optimaze UI, add translate button in now playing page
+
+`2020-10-26`
+* add lyric translation support for qq music, xiami music (thanks @RecluseWind)
+* update xiami api including get playlist, search, play music (thanks @RecluseWind)
+* fix bug some playlist not response in qq music website after installed extension
+
+`2020-10-18`
+* add lyric translation, now for netease music only (thanks @reserveword)
+* fix bilibili play fail bug
+* fix xiami now playing page music cover missing bug
+* fix kuwo music can't open bug
+
+`2020-09-12`
+* fix netease songlist contains more than 1k tracks import error (thanks @YueShangGuan）
+* support album cover as nowplaying background (thanks @YueShangGuan）
+
+
+`2020-08-24`
+* fix xiami songlist only shows part of songs bug (thanks @RecluseWind)
+* fix songlist cover and title display bug (thanks @RecluseWind)
+* support open url using system default browser for desktop version
+
+`2020-08-04`
+* add animation for now playing and current playlist window
+* fix xiami cover image not loaded bug (thanks @RecluseWind)
+* optimaze open songlist url, support netease toplist, artist, album (thanks @whtiehack)
+* optimaze cover image display, avoid resize (thanks @RecluseWind)
+
+`2020-07-10`
+* fix migu play fail bug
+* support press enter key to search in search bar thanks @kangbb）
+* support playlist song count show, support play/pause shortcut, desktop only（thanks @x2009again）
+* support restore scrollbar offset when go back（thanks @x2009again for discuss solution）
+* optimaze firefox scorlling bar, modify source image url for qq music, fix firefox jquery lib md5 error（thanks @RecluseWind）
+
+`2020-06-29`
+* support auto choose source when play fail
+
+`2020-06-28`
+* fix netease music only show 10 tracks bug
+
+`2020-04-30`
+* fix migu poor music quality bug
+
+`2020-04-27`
+* support adding playlist to favorite, special thanks to @zhenyiLiang
+* fix migu music
+* some minor optimaze
+
 `2019-11-27`
 * add frech language, special thanks to @Leoche
 

@@ -1,32 +1,48 @@
-Listen 1 (Chrome Extension) V2.5.2
+Listen 1 (Chrome Extension) V2.17.1
 ==========
-（最后更新于2019年11月27日）
+（最后更新于2020年12月12日）
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 
 [English Version](https://github.com/listen1/listen1_chrome_extension/blob/master/README_EN.md)
 
-重要
-----
-Listen1的用户，有个坏消息希望和大家分享。Listen1最近收到了[QQ音乐的DMCA Takedown Notice](https://github.com/github/dmca/blob/master/2017/2017-11-17-Listen1.md), 主要代码库已经因为此原因而临时关闭。悲观一点看，Listen1项目可能会在今年内彻底消失。
-
-Listen1诞生的初衷从不是和大公司的争夺版权利益，而是为了给予热爱音乐的人更好的收听体验，所以，Listen1是开源，免费的，并且不接受任何形式的捐助。正是因为有热爱音乐的Listen1的你们，Listen1才发展到今天这一步。不管结果如何，Listen1团队感谢所有支持过这个项目的人们。
-
-在这个关系项目生死存亡的时刻，我寻求项目因为DMCA被github关闭的援助。如果有对这个比较了解如何解决的人，或者你想对这个事情发表看法和建议，可以在[issue](https://github.com/listen1/listen1_chrome_extension/issues/113)留言，或者发送邮件到 githublisten1@gmail.com。我们会尽最大努力，来守护Listen1，即使可能它即将成为历史。
-
 缘起
 ----
 当我发现找个想听的歌因为版权听不了，需要打开好几个网站开始搜索，来回切换让我抓狂的时候，我知道是时候该做点什么了。
 
-妈妈再也不用担心我找不到我想听的歌了。这里包含了网易云音乐，虾米，QQ音乐, 酷狗音乐，酷我音乐的曲库，够全够大了吧。
+妈妈再也不用担心我找不到我想听的歌了。
+
+支持音乐平台
+* 网易云音乐
+* 虾米
+* QQ音乐
+* 酷狗音乐
+* 酷我音乐
+* bilibili
+* 咪咕音乐
 
 搜歌，听歌，就用 `Listen1`。
 
 [![imgur](https://i.imgur.com/dIVFtor.gif)]()
 
+V2.9.0 新特性：自动切换播放源(Beta)
+
+当一首歌的播放源不可用时，会自动搜索其他平台，获得可用的播放源。避免了用户手动搜索的麻烦。
+
 还有精选歌单哦。
 
-Chrome安装
+官方商店安装（推荐）
+----
+按你的浏览器类型点击下面的链接安装
+* [Chrome Web Store 安装](https://chrome.google.com/webstore/detail/listen-1/indecfegkejajpaipjipfkkbedgaodbp)
+* [FireFox 安装](https://addons.mozilla.org/zh-CN/firefox/addon/listen1-from-chrome/)
+* [Microsoft Edge 安装](https://microsoftedge.microsoft.com/addons/detail/hneiglcmpeedblkmbndhfbeahcpjojjg)
+
+感谢 [@TNT-c](https://github.com/TNT-c) 维护Firefox的发布渠道
+
+感谢 [@dhxh](https://github.com/dhxh) 维护Microsoft Edge的发布渠道
+
+Chrome下载安装
 ----
 1. 下载项目的zip文件，在右上方有个 `Download ZIP`, 解压到本地
 
@@ -36,16 +52,86 @@ Chrome安装
 
 Firefox打包安装
 -----------
-### 打包xpi文件（或在release页面下载已经打包好的xpi文件）
-1. 将根目录下manifest_firefox.json替换manifest.json
-2. `cd listen1_chrome_extension`
-3. `zip -r ../listen1.xpi *`
 
-### 安装
-1. 打开Firefox，加载xpi文件，完成安装
+1. 将根目录下manifest_firefox.json替换manifest.json
+
+2. `cd listen1_chrome_extension`
+
+3. `zip -r ../listen1.xpi *`, 完成打包xpi文件
+
+4. 打开Firefox，加载xpi文件，完成安装
+
+QQ音乐举报Listen1导致代码库临时关闭事件 （2017年11月）
+----
+Listen1的用户，有个坏消息希望和大家分享。Listen1最近收到了[QQ音乐的DMCA Takedown Notice](https://github.com/github/dmca/blob/master/2017/2017-11-17-Listen1.md), 主要代码库已经因为此原因而临时关闭。悲观一点看，Listen1项目可能会在今年内彻底消失。
+
+Listen1诞生的初衷从不是和大公司的争夺版权利益，而是为了给予热爱音乐的人更好的收听体验，所以，Listen1是开源，免费的，并且不接受任何形式的捐助。正是因为有热爱音乐的Listen1的你们，Listen1才发展到今天这一步。不管结果如何，Listen1团队感谢所有支持过这个项目的人们。
+
+在这个关系项目生死存亡的时刻，我寻求项目因为DMCA被github关闭的援助。如果有对这个比较了解如何解决的人，或者你想对这个事情发表看法和建议，可以在[issue](https://github.com/listen1/listen1_chrome_extension/issues/113)留言，或者发送邮件到 githublisten1@gmail.com。我们会尽最大努力，来守护Listen1，即使可能它即将成为历史。
 
 更新日志
 -------
+`2020-12-12`
+* 支持QQ音乐歌单搜索 (感谢@RecluseWind的提交）
+* 修复网易云音乐无法打开手机分享的歌单链接的bug (感谢@RecluseWind的提交）
+* 修复咪咕音乐无法搜索的bug
+
+`2020-10-28`
+* 增加本地音乐（仅限桌面版）
+
+`2020-10-27`
+* 增加歌单搜索功能（暂时只支持网易云）
+* 优化歌词显示
+* 修复blili歌手API错误，修复歌词时间轴格式不统一产生的错误 (感谢@RecluseWind的提交)
+* 优化UI，正在播放页增加翻译按钮
+
+`2020-10-26`
+* 增加歌词翻译功能QQ音乐和虾米音乐的支持（感谢@RecluseWind的提交)
+* 更新了虾米音乐获取歌曲播放地址，获取歌单，搜索API的获取方式，增加可靠性 (感谢@RecluseWind的提交)
+* 修复安装插件后qq音乐网页部分歌单无法打开的bug
+
+`2020-10-18`
+* 增加歌词翻译功能，暂时只支持网易云音乐 (感谢@reserveword的提交)
+* 修复bilibili音乐无法播放的bug
+* 修复虾米播放页歌曲封面无法显示的bug
+* 修复酷我音乐歌单无法打开的bug
+
+`2020-09-12`
+* 修复网易歌单超过1000首时导入失败的bug (感谢@YueShangGuan的提交）
+* 支持显示歌曲封面作为正在播放背景 (感谢@YueShangGuan的提交）
+
+`2020-08-24`
+* 修复虾米歌单歌曲只显示部分歌曲的bug (感谢@RecluseWind的提交)
+* 修复歌单图片和标题显示问题 (感谢@RecluseWind的提交)
+* 支持桌面版点击链接打开系统默认浏览器
+
+`2020-08-04`
+* 增加正在播放窗口和播放列表弹窗的动画效果
+* 修复虾米艺人封面图片无法显示的问题 （感谢@RecluseWind的提交）
+* 优化打开歌单功能，支持网易云排行榜单，艺人页面，专辑页面网址（感谢@whtiehack的提交）
+* 优化专辑图片显示，避免图片被压缩 （感谢@RecluseWind的提交）
+
+`2020-07-10`
+* 修复咪咕音乐无法播放的问题
+* 支持顶部搜索栏回车触发 （感谢@kangbb的提交）
+* 支持歌单歌曲数显示，支持播放/暂停全局快捷键（桌面版）（感谢@x2009again的提交）
+* 支持返回时回到滚动条历史位置（感谢@x2009again参与完成）
+* 优化firefox滑动条，修改qq音乐图标网址，解决firefox上架jquery代码问题 （感谢@RecluseWind的提交）
+
+`2020-06-29`
+* 支持播放失败时自动切换播放源(Beta)
+
+`2020-06-28`
+* 修复网易歌单仅显示10首歌曲的问题
+
+`2020-04-30`
+* 修复咪咕音质较差的问题
+
+`2020-04-27`
+* 增加收藏歌单功能，特别感谢 @zhenyiLiang
+* 修复咪咕音乐无法播放的bug
+* 一些细节优化
+
 `2019-11-27`
 * 加入法语支持, 特别感谢 @Leoche
 
