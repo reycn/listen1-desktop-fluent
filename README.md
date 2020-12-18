@@ -9,6 +9,7 @@
 - Fluent Design Acrylic 毛玻璃  
 - 专辑封面的动画效果  
 
+[![imgur](https://i.imgur.com/oj3MCKD.png)]()
 ## 最近更新
 
 [2.17.1](https://github.com/reycn/listen1_desktop_fluent/releases/tag/2.17.1) (2020.12.18)
@@ -30,7 +31,6 @@ Listen 1可以搜索和播放来自多个主流音乐网站的歌曲，让你的
 * bilibili
 * 咪咕音乐
 
-[![imgur](http://i.imgur.com/Ae6ItmA.png)]()
 
 * 支持Windows，Mac，Linux平台
 
