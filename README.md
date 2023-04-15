@@ -14,7 +14,7 @@
 
 ## 最近更新
 
-[2.28.0](https://github.com/reycn/listen1_desktop_fluent/releases/tag/2.82.0) (2023.04.15)
+[2.28.0](https://github.com/reycn/listen1-desktop-fluent/releases/tag/v2.28.0) (2023.04.15)
 
 - 同步 2.28.0 版本更新
 - 彻底解决 Windows 1903 以上的 [毛玻璃窗口拖动缓慢问题](https://github.com/23phy/ewc/issues/22)
