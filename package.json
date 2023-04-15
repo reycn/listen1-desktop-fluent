@@ -1,45 +1,40 @@
 {
   "name": "listen1",
-  "version": "2.17.1",
+  "version": "2.28.0",
   "description": "One for all free music in China",
   "main": "app/main.js",
   "scripts": {
-    "postinstall": "install-app-deps",
+    "postinstall": "electron-builder install-app-deps",
     "start": "electron ./app --enable-logging",
     "dev": "NODE_ENV='development' npm run start",
     "dist:mac": "CSC_IDENTITY_AUTO_DISCOVERY=false DEBUG=electron-builder electron-builder --mac",
     "dist": "electron-builder .",
-    "dist:linux": "./node_modules/.bin/electron-builder --linux --ia32 --x64",
-    "dist:linux32": "./node_modules/.bin/electron-builder --linux --ia32",
-    "dist:linux64": "./node_modules/.bin/electron-builder --linux --x64",
-    "dist:win": "./node_modules/.bin/electron-builder --win --ia32 --x64",
-    "dist:win32": "./node_modules/.bin/electron-builder --win --ia32",
-    "dist:win64": "./node_modules/.bin/electron-builder --win --x64"
+    "dist:linux": "electron-builder --linux --ia32 --x64",
+    "dist:linux32": "electron-builder --linux --ia32",
+    "dist:linux64": "electron-builder --linux --x64",
+    "dist:win": "electron-builder --win"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/listen1/listen1_desktop.git"
+    "url": "git+https://github.com/reycn/listen1-desktop-fluent.git"
   },
   "keywords": [
     "Electron",
     "Listen 1"
   ],
-  "author": "Listen 1 <githublisten1@gmail.com>",
+  "author": "Reycn",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/listen1/listen1_desktop/issues"
+    "url": "https://github.com/reycn/listen1-desktop-fluent/issues"
   },
-  "homepage": "https://github.com/listen1/listen1_desktop#readme",
+  "homepage": "https://github.com/reycn/listen1-desktop-fluent#readme",
   "build": {
     "appId": "com.listen1.listen1",
     "productName": "Listen1",
     "asar": true,
     "artifactName": "${name}_${version}_${os}_${arch}.${ext}",
     "dmg": {
-      "title": "Listen 1",
       "icon": "build/disk.icns",
-      "background": "build/background.png",
-      "iconSize": 80,
       "contents": [
         {
           "x": 192,
@@ -53,15 +48,29 @@
         }
       ]
     },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64",
+            "universal"
+          ]
+        }
+      ],
+      "category": "public.app-category.music"
+    },
     "linux": {
       "target": [
         "tar.gz",
         "appImage",
         "deb"
-      ]
+      ],
+      "category": "Audio"
     },
     "nsis": {
-      "runAfterFinish": true,
+      "runAfterFinish": false,
       "deleteAppDataOnUninstall": true,
       "allowToChangeInstallationDirectory": true,
       "oneClick": false,
@@ -71,16 +80,29 @@
       "createDesktopShortcut": true
     },
     "win": {
-      "target": "nsis",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "7z",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
       "icon": "build/icon.ico"
     }
   },
   "devDependencies": {
-    "electron": "^8.2.3",
-    "electron-builder": "^22.5.1",
-    "electron-debug": "^1.5.0"
+    "electron": "^13.6.9",
+    "electron-builder": "^23.0.3",
+    "prettier": "^2.6.2"
   },
   "dependencies": {
-    "ewc": "^0.0.1"
+    "electron-acrylic-window": "^0.5.11"
   }
 }
